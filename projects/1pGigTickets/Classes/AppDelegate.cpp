@@ -1,5 +1,7 @@
+
 #include "AppDelegate.h"
 #include "GameScene.h"
+#include "GameConfig.h"
 
 USING_NS_CC;
 
@@ -7,22 +9,27 @@ AppDelegate::AppDelegate() {
 
 }
 
-AppDelegate::~AppDelegate() 
-{
+AppDelegate::~AppDelegate() {
+    delete GameConfig::sharedInstance();
 }
 
 bool AppDelegate::applicationDidFinishLaunching() {
     // initialize director
-    Director* director = Director::getInstance();
-    EGLView* eglView = EGLView::getInstance();
+    Director * director = Director::getInstance();
+    EGLView * eglView = EGLView::getInstance();
 
     director->setOpenGLView(eglView);
 	
     // turn on display FPS
-    director->setDisplayStats(true);
+    director->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
+    
+    FileUtils::getInstance()->addSearchPath("Res");
+    
+    // load game config
+    GameConfig::sharedInstance()->load();
 
     // create a scene. it's an autorelease object
     Scene *scene = GameScene::scene();

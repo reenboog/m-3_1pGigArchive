@@ -1,7 +1,8 @@
 
 #include "GameScene.h"
+#include "GemField.h"
 
-USING_NS_CC;
+#pragma mark - cocos2d stuff
 
 Scene * GameScene::scene() {
     // 'scene' is an autorelease object
@@ -19,65 +20,126 @@ Scene * GameScene::scene() {
 
 // on "init" you need to initialize your instance
 bool GameScene::init() {
-    //////////////////////////////
-    // 1. super init first
     if(!Layer::init()) {
         return false;
     }
     
+    // add sprite sheets
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemGuitar.plist");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemKeyboard.plist");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemMark.plist");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemMic.plist");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemPlectrum.plist");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemSax.plist");
+    
+    //
+    
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
 
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
+    back = Sprite::create("gameBack.png");
 
-    // add a "close" icon to exit the progress. it's an autorelease object
-    MenuItemImage *closeItem = MenuItemImage::create(
-                                        "CloseNormal.png",
-                                        "CloseSelected.png",
-                                        CC_CALLBACK_1(GameScene::menuCloseCallback, this));
+    back->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+
+    this->addChild(back, 0);
     
-	closeItem->setPosition(Point(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
-
-    // create menu, it's an autorelease object
-    Menu* menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Point::ZERO);
-    this->addChild(menu, 1);
-
-    /////////////////////////////
-    // 3. add your codes below...
-
-    // add a label shows "Hello World"
-    // create and initialize a label
+    field = new GemField();
+    field->addWatcher(this);
     
-    LabelTTF* label = LabelTTF::create("Hello World", "Arial", 24);
+    this->addChild(field);
+	float posX = (visibleSize.width - kTileSize * (kFieldWidth)) / 2;
+	float posY = (visibleSize.height - kTileSize * (kFieldHeight)) / 2 - 20;
+	field->setPosition(posX, posY);
     
-    // position the label on the center of the screen
-    label->setPosition(Point(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
-
-    // add the label as a child to this layer
-    this->addChild(label, 1);
-
-    // add "HelloWorld" splash screen"
-    Sprite* sprite = Sprite::create("HelloWorld.png");
-
-    // position the sprite on the center of the screen
-    sprite->setPosition(Point(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
+    // prepare for touches
+    canTouch = false;
+    swipeEnded = false;
+    firstTouchLocation = Point(-1, -1);
+    Director::getInstance()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
     
     return true;
 }
 
+#pragma mark - field watcher delegate
 
-void GameScene::menuCloseCallback(Object* pSender) {
-    Director::getInstance()->end();
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
+void GameScene::onGemDestroyed(GemColour colour) {
+	// get is destroyed
 }
+
+void GameScene::onMatch(int length, GemColour colour) {
+	// on match
+}
+
+void GameScene::onFieldShuffleStarted() {
+	CCLOG("I'm shuffling");
+}
+
+void GameScene::onMovementEnded() {
+	canTouch = true;
+}
+
+void GameScene::onMove(bool legal) {
+	if(!legal) {
+		//
+	}
+}
+
+void GameScene::onMovementStarted() {
+	canTouch = false;
+}
+
+#pragma mark - update logic
+
+void GameScene::update(float dt) {
+    
+}
+
+#pragma mark - touches
+
+bool GameScene::ccTouchBegan(Touch *touch, Event *event) {
+	firstTouchLocation = convertTouchToNodeSpace(touch);
+	swipeEnded = false;
+	return true;
+}
+
+void GameScene::ccTouchMoved(Touch *touch, Event *event) {
+	Point touchLocation = convertTouchToNodeSpace(touch);
+	if(!swipeEnded && canTouch && firstTouchLocation.getDistance(touchLocation) > (kTileSize / 2)) {
+		swipeEnded = true;
+        
+		float differenceX = touchLocation.x - firstTouchLocation.x;
+		float differenceY = touchLocation.y - firstTouchLocation.y;
+        
+		Direction direction;
+		if(fabs(differenceX) >= fabs(differenceY)) {
+			if(differenceX >= 0) {
+				direction = D_Right;
+			} else {
+				direction = D_Left;
+			}
+		} else {
+			if(differenceY >= 0) {
+				direction = D_Up;
+			} else {
+				direction = D_Down;
+			}
+		}
+		//field->makeMove(convertToCoordinates(firstTouchLocation), direction);
+        field->swipeAction(convertToCoordinates(firstTouchLocation), direction);
+	}
+}
+
+void GameScene::ccTouchEnded(Touch *touch, Event *event) {
+	if(!swipeEnded && canTouch) {
+		field->clickAction(convertTouchToCoordinates(touch));
+	}
+}
+
+Point GameScene::convertToCoordinates(Point point) {
+	return Point((int) ((point.x - field->getPositionX()) / kTileSize), (int) (kFieldHeight - (point.y - field->getPositionY()) / kTileSize));
+}
+
+Point GameScene::convertTouchToCoordinates(Touch *touch) {
+	return convertToCoordinates(convertTouchToNodeSpace(touch));
+}
+
