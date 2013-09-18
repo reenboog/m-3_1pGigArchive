@@ -116,7 +116,7 @@ private:
 	
 	Point *selectedGemCoordinates;
 
-	GamePhase gamePhase;
+	FieldState state;
 
 	int columnsWithMatches;
 

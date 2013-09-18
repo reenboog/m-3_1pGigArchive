@@ -349,7 +349,7 @@ void GemField::swapGems(int fromX, int fromY, int toX, int toY) {
 		(*it)->onMove(hasMatches);
 		(*it)->onMovementStarted();
 	}
-	gamePhase = GP_Moving;
+	state = FS_Moving;
 }
 
 void GemField::swapGemsIndices(int fromX, int fromY, int toX, int toY) {
@@ -481,13 +481,12 @@ void GemField::visit() {
 
 void GemField::update(float dt)
 {
-	switch (gamePhase)
-	{
-		case GP_Ready:
+	switch(state) {
+		case FS_Ready:
 			if(checkAvailableMoves()) {
 				for(FieldWatcherDelegatePool::iterator it = watchers.begin(); it != watchers.end(); it++) {
 					(*it)->onMovementEnded();
-					gamePhase = GP_Waiting;
+					state = FS_Waiting;
 				}
 			} else {
 				shuffleField(true);
@@ -496,39 +495,39 @@ void GemField::update(float dt)
 				}
 			}
 			break;
-		case GP_Moving:
+		case FS_Moving:
 			if(!gemsAreMoving()) {
 				//CCLOG("-GP_Moving");
-				gamePhase = GP_Searching;
+				state = FS_Searching;
 			}
 			break;
-		case GP_Searching:
+		case FS_Searching:
 			//CCLOG("-GP_Searching");
 			if(hasAnyMatches()) {
 				// If we do - find and resolve them
 				resolveMatches();	
-				gamePhase = GP_Destroying;
+				state = FS_Destroying;
 			} else {
-				gamePhase = GP_Ready;
+				state = FS_Ready;
 			}
 			break;
-		case GP_Destroying:
+		case FS_Destroying:
 			if(!gemsAreMoving()) {
 				//CCLOG("-GP_Destroying");
 				refillField();
-				gamePhase = GP_Refilling;
+				state = FS_Refilling;
 			}
 			break;
-		case GP_Refilling:
+		case FS_Refilling:
 			if(!gemsAreMoving()) {
 				//CCLOG("-GP_Refilling");
-				gamePhase = GP_Searching;
+				state = FS_Searching;
 			}
 			break;
-		case GP_Shuffling:
+		case FS_Shuffling:
 			if(!gemsAreMoving()) {
 				//CCLOG("-GP_Shuffling");
-				gamePhase = GP_Searching;
+				state = FS_Searching;
 			}
 			break;
 		default:
@@ -818,7 +817,7 @@ void GemField::resetField() {
 }
 
 void GemField::shuffleField(bool reset) {
-	gamePhase = GP_Shuffling;
+	state = FS_Shuffling;
 	if(reset) {
 		resetField();
 	} else {

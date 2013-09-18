@@ -21,6 +21,8 @@
 
 #define kPlayersAmount 2
 
+#define kEquipmentSlotsAmount 5
+
 enum GemColour {
 	GC_Random,
 	GC_Guitar,
@@ -32,23 +34,14 @@ enum GemColour {
 	GC_Wild
 };
 
-/*
- colors:
-
- guitar
- microphone
- keyboard
- saxophone
- plectrum
- question mark
-*/
-
 enum GemState {
 	GS_Idle,
 	GS_Moving,
 	GS_Moved,
 	GS_Selected,
 	GS_Matched,
+	GS_Transforming,
+	GS_Transformed,
 	GS_Destroying,
 	GS_Destroyed,
 	GS_Immovable
@@ -69,15 +62,26 @@ enum Direction {
 	D_Right,
 };
 
-enum GamePhase {
-	GP_Ready,
-	GP_Waiting,
-	GP_Moving,
-	GP_Searching,
-	GP_Destroying,
-	GP_Refilling,
-	GP_Shuffling,
+enum FieldState {
+	FS_Ready,
+	FS_Waiting,
+	FS_Moving,
+	FS_Searching,
+	FS_Transforming,
+	FS_Destroying,
+	FS_Refilling,
+	FS_Shuffling,
 };
+
+//enum GamePhase {
+//	GP_Ready,
+//	GP_Waiting,
+//	GP_Moving,
+//	GP_Searching,
+//	GP_Destroying,
+//	GP_Refilling,
+//	GP_Shuffling,
+//};
 
 #define SafeDelete(p) {if(p) {delete p; p = NULL;}}
 
