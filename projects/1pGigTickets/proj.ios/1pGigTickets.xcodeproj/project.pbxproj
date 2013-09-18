@@ -20,6 +20,7 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
+		B8230BC117EA03BD00C41F7F /* Shared.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8230BBF17EA03BD00C41F7F /* Shared.cpp */; };
 		B8697B5617E5D6790090EA88 /* Icon-57.png in Resources */ = {isa = PBXBuildFile; fileRef = B8697B4E17E5D6790090EA88 /* Icon-57.png */; };
 		B8697B5717E5D6790090EA88 /* Icon-57@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B8697B4F17E5D6790090EA88 /* Icon-57@2x.png */; };
 		B8697B5817E5D6790090EA88 /* Icon-60.png in Resources */ = {isa = PBXBuildFile; fileRef = B8697B5017E5D6790090EA88 /* Icon-60.png */; };
@@ -198,6 +199,8 @@
 		1D6058910D05DD3D006BFB54 /* 1pGigTickets.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = 1pGigTickets.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		288765A40DF7441C002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		B8230BBF17EA03BD00C41F7F /* Shared.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Shared.cpp; path = ../Classes/Shared.cpp; sourceTree = "<group>"; };
+		B8230BC017EA03BD00C41F7F /* Shared.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Shared.h; path = ../Classes/Shared.h; sourceTree = "<group>"; };
 		B8697B4E17E5D6790090EA88 /* Icon-57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-57.png"; sourceTree = SOURCE_ROOT; };
 		B8697B4F17E5D6790090EA88 /* Icon-57@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-57@2x.png"; sourceTree = SOURCE_ROOT; };
 		B8697B5017E5D6790090EA88 /* Icon-60.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-60.png"; sourceTree = SOURCE_ROOT; };
@@ -283,6 +286,8 @@
 				1AFAF8B416D35DE700DB1158 /* AppDelegate.h */,
 				B8CE576617E3107000BBBDAE /* GameConfig.cpp */,
 				B8CE576717E3107100BBBDAE /* GameConfig.h */,
+				B8230BBF17EA03BD00C41F7F /* Shared.cpp */,
+				B8230BC017EA03BD00C41F7F /* Shared.h */,
 				B87B5AF217E4D17900975FD5 /* Constants.h */,
 				B87B5AF317E4D17900975FD5 /* Gem.cpp */,
 				B87B5AF417E4D17900975FD5 /* Gem.h */,
@@ -572,6 +577,7 @@
 				B8CE576817E3107100BBBDAE /* GameConfig.cpp in Sources */,
 				B87B5AF717E4D17900975FD5 /* Gem.cpp in Sources */,
 				B87B5AF817E4D17900975FD5 /* GemField.cpp in Sources */,
+				B8230BC117EA03BD00C41F7F /* Shared.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

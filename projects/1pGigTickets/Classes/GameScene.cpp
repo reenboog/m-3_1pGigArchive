@@ -1,6 +1,7 @@
 
 #include "GameScene.h"
 #include "GemField.h"
+#include "Shared.h"
 
 #pragma mark - cocos2d stuff
 
@@ -34,7 +35,13 @@ bool GameScene::init() {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemMic.plist");
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemPlectrum.plist");
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemSax.plist");
-    
+
+    Shared::loadAnimation("animations.plist", "guitar");
+    Shared::loadAnimation("animations.plist", "keyboard");
+    Shared::loadAnimation("animations.plist", "mark");
+    Shared::loadAnimation("animations.plist", "mic");
+    Shared::loadAnimation("animations.plist", "plectrum");
+    Shared::loadAnimation("animations.plist", "sax");
     //
     
     Size visibleSize = Director::getInstance()->getVisibleSize();

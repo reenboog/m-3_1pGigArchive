@@ -74,6 +74,8 @@ void Gem::reset(int x, int y, GemColour colour, GemType type) {
 	this->type = type;
 	this->state = GS_Idle;
     
+    this->stopAllActions();
+    
 	// Get new sprite name
 	string fileName = "guitar0.png";
 
@@ -151,7 +153,7 @@ void Gem::transformIntoBonus(GemType type) {
                                                (FiniteTimeAction*) shrink, 
                                                (FiniteTimeAction*) endTransformation,
                                                NULL);
-		runAction(destruction);
+        runAction(destruction);
 	} else {
 		this->state = GS_Matched;
 	}
@@ -159,6 +161,22 @@ void Gem::transformIntoBonus(GemType type) {
 
 void Gem::onTransformationEnd(Object *sender) {
 	state = GS_Transformed;
+    
+    string animationName = "";
+    
+    switch(colour) {
+		case GC_Guitar: animationName = "guitar"; break;
+		case GC_Keyboard: animationName = "keyboard"; break;
+        case GC_Microphone: animationName = "mic"; break;
+		case GC_Plectrum: animationName = "plectrum"; break;
+        case GC_Question: animationName = "mark"; break;
+		case GC_Saxophone: animationName = "sax"; break;
+            
+        default: CCLOG("default gem color in reset!");
+	}
+    
+    Animate *action = Animate::create(AnimationCache::getInstance()->animationByName(animationName.c_str()));
+    runAction(RepeatForever::create(action));
 }
 
 void Gem::applyBonusStyling() {

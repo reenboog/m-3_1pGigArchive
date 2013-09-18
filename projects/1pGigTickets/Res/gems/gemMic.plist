@@ -7,7 +7,7 @@
             <key>mic0.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,2},{78,78}}</string>
+                <string>{{102,102},{78,78}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -17,6 +17,45 @@
                 <key>sourceSize</key>
                 <string>{78,78}</string>
             </dict>
+            <key>mic1.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{102,1},{100,100}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{100,100}}</string>
+                <key>sourceSize</key>
+                <string>{100,100}</string>
+            </dict>
+            <key>mic2.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{1,102},{100,100}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{100,100}}</string>
+                <key>sourceSize</key>
+                <string>{100,100}</string>
+            </dict>
+            <key>mic3.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{1,1},{100,100}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{100,100}}</string>
+                <key>sourceSize</key>
+                <string>{100,100}</string>
+            </dict>
         </dict>
         <key>metadata</key>
         <dict>
@@ -25,9 +64,9 @@
             <key>realTextureFileName</key>
             <string>gemMic.png</string>
             <key>size</key>
-            <string>{128,128}</string>
+            <string>{256,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:cc2ebc6571f5bab6dc790d7838d70f57$</string>
+            <string>$TexturePacker:SmartUpdate:c4aee6745f0d47b4474fb9c2fb42215c$</string>
             <key>textureFileName</key>
             <string>gemMic.png</string>
         </dict>
