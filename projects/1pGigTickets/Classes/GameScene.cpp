@@ -4,21 +4,24 @@
 
 #pragma mark - cocos2d stuff
 
-Scene * GameScene::scene() {
-    // 'scene' is an autorelease object
-    Scene *scene = Scene::create();
-    
-    // 'layer' is an autorelease object
-    GameScene *layer = GameScene::create();
+GameScene::~GameScene() {
+}
 
-    // add layer as a child to scene
+GameScene::GameScene() {
+    field = nullptr;
+}
+
+#pragma mark - init
+
+Scene * GameScene::scene() {
+    Scene *scene = Scene::create();
+
+    GameScene *layer = GameScene::create();
     scene->addChild(layer);
 
-    // return the scene
     return scene;
 }
 
-// on "init" you need to initialize your instance
 bool GameScene::init() {
     if(!Layer::init()) {
         return false;
@@ -47,14 +50,18 @@ bool GameScene::init() {
     field->addWatcher(this);
     
     this->addChild(field);
+    
 	float posX = (visibleSize.width - kTileSize * (kFieldWidth)) / 2;
 	float posY = (visibleSize.height - kTileSize * (kFieldHeight)) / 2 - 20;
-	field->setPosition(posX, posY);
+	
+    field->setPosition(posX, posY);
     
     // prepare for touches
     canTouch = false;
     swipeEnded = false;
+
     firstTouchLocation = Point(-1, -1);
+
     Director::getInstance()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
     
     return true;
@@ -74,7 +81,7 @@ void GameScene::onGemsToBeShuffled() {
 	CCLOG("I'm shuffling");
 }
 
-void GameScene::onMovementEnded() {
+void GameScene::onGemsFinishedMoving() {
 	canTouch = true;
 }
 
@@ -97,13 +104,18 @@ void GameScene::update(float dt) {
 #pragma mark - touches
 
 bool GameScene::ccTouchBegan(Touch *touch, Event *event) {
-	firstTouchLocation = convertTouchToNodeSpace(touch);
+    Point location = touch->getLocation();
+    location = this->convertToNodeSpace(location);
+    
+	firstTouchLocation = location;
+    
 	swipeEnded = false;
 	return true;
 }
 
 void GameScene::ccTouchMoved(Touch *touch, Event *event) {
 	Point touchLocation = convertTouchToNodeSpace(touch);
+
 	if(!swipeEnded && canTouch && firstTouchLocation.getDistance(touchLocation) > (kTileSize / 2)) {
 		swipeEnded = true;
         
@@ -125,21 +137,21 @@ void GameScene::ccTouchMoved(Touch *touch, Event *event) {
 			}
 		}
 		//field->makeMove(convertToCoordinates(firstTouchLocation), direction);
-        field->swipeAction(convertToCoordinates(firstTouchLocation), direction);
+        field->swipeAction(convertLocationToFieldCoordinates(firstTouchLocation), direction);
 	}
 }
 
 void GameScene::ccTouchEnded(Touch *touch, Event *event) {
+    Point location = touch->getLocation();
+    location = this->convertToNodeSpace(location);
+
 	if(!swipeEnded && canTouch) {
-		field->clickAction(convertTouchToCoordinates(touch));
+		field->clickAction(convertLocationToFieldCoordinates(location));
 	}
 }
 
-Point GameScene::convertToCoordinates(Point point) {
+#pragma mark -
+
+Point GameScene::convertLocationToFieldCoordinates(Point point) {
 	return Point((int) ((point.x - field->getPositionX()) / kTileSize), (int) (kFieldHeight - (point.y - field->getPositionY()) / kTileSize));
 }
-
-Point GameScene::convertTouchToCoordinates(Touch *touch) {
-	return convertToCoordinates(convertTouchToNodeSpace(touch));
-}
-

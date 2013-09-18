@@ -485,7 +485,7 @@ void GemField::update(float dt)
 		case FS_Ready:
 			if(checkAvailableMoves()) {
 				for(FieldWatcherDelegatePool::iterator it = watchers.begin(); it != watchers.end(); it++) {
-					(*it)->onMovementEnded();
+					(*it)->onGemsFinishedMoving();
 					state = FS_Waiting;
 				}
 			} else {

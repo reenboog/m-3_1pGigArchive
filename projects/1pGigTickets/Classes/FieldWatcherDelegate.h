@@ -11,7 +11,7 @@ public:
 	virtual void onGemDestroyed(GemColour colour) = 0;
 	virtual void onGemsToBeShuffled() = 0;
 	virtual void onGemsStartedSwapping() = 0;
-	virtual void onMovementEnded() = 0;
+	virtual void onGemsFinishedMoving() = 0;
 	
     // player specific stuff
 	virtual void onMoveMade(bool legal) = 0;
