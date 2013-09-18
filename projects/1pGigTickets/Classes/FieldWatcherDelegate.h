@@ -7,12 +7,14 @@
 
 class FieldWatcherDelegate {
 public:
-	virtual void onMatch(int length, GemColour colour) = 0;
+	virtual void onGemsMatched(int length, GemColour colour) = 0;
 	virtual void onGemDestroyed(GemColour colour) = 0;
-	virtual void onFieldShuffleStarted() = 0;
-	virtual void onMovementStarted() = 0;
+	virtual void onGemsToBeShuffled() = 0;
+	virtual void onGemsStartedSwapping() = 0;
 	virtual void onMovementEnded() = 0;
-	virtual void onMove(bool legal) = 0;
+	
+    // player specific stuff
+	virtual void onMoveMade(bool legal) = 0;
 };
 
 typedef std::list<FieldWatcherDelegate *> FieldWatcherDelegatePool;

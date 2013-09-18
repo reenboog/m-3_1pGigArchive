@@ -141,7 +141,7 @@ void GemField::resolveMatches() {
 
 void GemField::resolveMatch(Match match) {
 	for(FieldWatcherDelegatePool::iterator it = watchers.begin(); it != watchers.end(); it++) {
-		(*it)->onMatch(match.length, match.colour);
+		(*it)->onGemsMatched(match.length, match.colour);
 	}
 
 	int stepX = 1;
@@ -346,8 +346,8 @@ void GemField::swapGems(int fromX, int fromY, int toX, int toY) {
 	}
 
 	for(FieldWatcherDelegatePool::iterator it = watchers.begin(); it != watchers.end(); it++) {
-		(*it)->onMove(hasMatches);
-		(*it)->onMovementStarted();
+		(*it)->onMoveMade(hasMatches);
+		(*it)->onGemsStartedSwapping();
 	}
 	state = FS_Moving;
 }
@@ -491,7 +491,7 @@ void GemField::update(float dt)
 			} else {
 				shuffleField(true);
 				for(FieldWatcherDelegatePool::iterator it = watchers.begin(); it != watchers.end(); it++) {
-					(*it)->onFieldShuffleStarted();
+					(*it)->onGemsToBeShuffled();
 				}
 			}
 			break;

@@ -21,7 +21,7 @@
 
 #define kPlayersAmount 2
 
-#define kEquipmentSlotsAmount 5
+#define kSpawnBonuses 0
 
 enum GemColour {
 	GC_Random,
@@ -73,15 +73,19 @@ enum FieldState {
 	FS_Shuffling,
 };
 
-//enum GamePhase {
-//	GP_Ready,
-//	GP_Waiting,
-//	GP_Moving,
-//	GP_Searching,
-//	GP_Destroying,
-//	GP_Refilling,
-//	GP_Shuffling,
-//};
+#if(kSpawnBonuses == 1)
+    const GemType kVerticalMatchFourBonus = GT_LineVer;
+    const GemType kHorizontalMatchFourBonus = GT_LineHor;
+    const GemType kVerticalMatchFiveBonus = GT_LineVer;
+    const GemType kHorizontalMatchFiveBonus = GT_LineHor;
+    const GemType kCrossMatchBonus = GT_Cross;
+#else
+    const GemType kVerticalMatchFourBonus = GT_Colour;
+    const GemType kHorizontalMatchFourBonus = GT_Colour;
+    const GemType kVerticalMatchFiveBonus = GT_Colour;
+    const GemType kHorizontalMatchFiveBonus = GT_Colour;
+    const GemType kCrossMatchBonus = GT_Colour;
+#endif
 
 #define SafeDelete(p) {if(p) {delete p; p = NULL;}}
 

@@ -25,7 +25,6 @@ public:
     CREATE_FUNC(GameScene);
     
     // touches
-    // Working with touches
 	virtual void ccTouchEnded(Touch *touch, Event *event);
 	virtual bool ccTouchBegan(Touch *touch, Event *event);
 	virtual void ccTouchMoved(Touch *touch, Event *event);
@@ -36,11 +35,11 @@ public:
 
     // field watch delegate methods
     virtual void onGemDestroyed(GemColour colour);
-	virtual void onMatch(int length, GemColour colour);
-	virtual void onFieldShuffleStarted();
-	virtual void onMovementStarted();
+	virtual void onGemsMatched(int length, GemColour colour);
+	virtual void onGemsToBeShuffled();
+	virtual void onGemsStartedSwapping();
 	virtual void onMovementEnded();
-	virtual void onMove(bool legal);
+	virtual void onMoveMade(bool legal);
     
     // update logic
     void update(float dt);

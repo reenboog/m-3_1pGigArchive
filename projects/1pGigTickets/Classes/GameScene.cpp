@@ -66,11 +66,11 @@ void GameScene::onGemDestroyed(GemColour colour) {
 	// get is destroyed
 }
 
-void GameScene::onMatch(int length, GemColour colour) {
+void GameScene::onGemsMatched(int length, GemColour colour) {
 	// on match
 }
 
-void GameScene::onFieldShuffleStarted() {
+void GameScene::onGemsToBeShuffled() {
 	CCLOG("I'm shuffling");
 }
 
@@ -78,13 +78,13 @@ void GameScene::onMovementEnded() {
 	canTouch = true;
 }
 
-void GameScene::onMove(bool legal) {
+void GameScene::onMoveMade(bool legal) {
 	if(!legal) {
 		//
 	}
 }
 
-void GameScene::onMovementStarted() {
+void GameScene::onGemsStartedSwapping() {
 	canTouch = false;
 }
 
