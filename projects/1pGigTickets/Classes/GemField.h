@@ -20,7 +20,7 @@ struct Match {
 		this->colour = colour;
 	}
     
-	Match(){}
+	Match() {}
     
 	int fromX;
 	int fromY;
@@ -101,7 +101,7 @@ private:
 	bool hasAnyMatches();
     
 	void resolveMatches();
-	void resolveMatch(Match match);
+	void resolveMatch(const Match &match);
     
 	void refillLine(int lineNumber, int direction = D_Down, bool reset = true);
 	void refillField(bool reset = true);

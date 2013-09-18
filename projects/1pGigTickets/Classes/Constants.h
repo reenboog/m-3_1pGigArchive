@@ -23,7 +23,7 @@
 
 #define kPlayersAmount 2
 
-#define kSpawnBonuses 0
+#define kSpawnBonuses 1
 
 const bool kPreloadField = false;
 

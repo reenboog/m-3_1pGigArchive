@@ -87,11 +87,11 @@ bool GemField::init() {
 				this->addChild(gems[y][x]);
                 gems[y][x]->autorelease();
 			} else {
-				// Fill holes with tiles
-				Sprite *tile = Sprite::create("tile.png");
-				tile->setZOrder(kZOrderTile);
-				tile->setPosition(Gem::convertCoordinatesToPixels(x, y));
-				this->addChild(tile);
+//				// Fill holes with tiles
+//				Sprite *tile = Sprite::create("tile.png");
+//				tile->setZOrder(kZOrderTile);
+//				tile->setPosition(Gem::convertCoordinatesToPixels(x, y));
+//				this->addChild(tile);
 			}
 		}
 	}
@@ -300,12 +300,14 @@ void GemField::resolveMatches() {
 	}
 }
 
-void GemField::resolveMatch(Match match) {
+void GemField::resolveMatch(const Match &match) {
 	bool bonusWasAdded = false;
 	bool createBonusNext = false;
 	for(FieldWatcherDelegatePool::iterator it = watchers.begin(); it != watchers.end(); it++) {
 		(*it)->onGemsMatched(match.length, match.colour);
 	}
+    
+    CCLOG("match: %i, %i", match.length, match.colour);
     
 	int stepX = 1;
 	int stepY = 1;
