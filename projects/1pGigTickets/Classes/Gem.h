@@ -21,21 +21,25 @@ public:
 
 	void match();
 	void destroy();
+    void transformIntoBonus(GemType type);
 	void remove();
+
 	void reset(int x, int y, GemColour = GC_Random, GemType = GT_Colour);
 
 	GemState getState();
 	GemType getType();
 	GemColour getGemColour();
+    void resetState();
 
 	void setFreeze(int power);
 	void makeBomb(GemType effect);
 	static Point convertCoordinatesToPixels(int x, int y);
-private: 
+private:
+    void applyBonusStyling();
 	void moveTo(int x, int y, float time, bool goBack = false, int blocksToWait = 0, int rowsToWait = 0);
 	void onMovementEnd(Object *sender);
 	void onDestructionEnd(Object *sender);
-
+    void onTransformationEnd(Object *sender);
 private:
 	GemState state;
 	GemColour colour;

@@ -46,7 +46,7 @@ bool GameScene::init() {
 
     this->addChild(back, 0);
     
-    field = new GemField();
+    field = GemField::create();
     field->addWatcher(this);
     
     this->addChild(field);

@@ -19,9 +19,9 @@ struct Match {
 		this->length = (toX - fromX) + (toY - fromY) + 1;
 		this->colour = colour;
 	}
-
-	Match();
-
+    
+	Match(){}
+    
 	int fromX;
 	int fromY;
 	int toX;
@@ -38,36 +38,43 @@ struct Move {
 		this->fromY = fromY;
 		this->toX = toX;
 		this->toY = toY;
-
+        
 		this->matches = matches;
 		this->legal = !matches.empty();
 	}
-
+    
 	Move() { this->legal = false; }
-
+    
 	bool legal;
-
+    
 	int fromX;
 	int fromY;
 	int toX;
 	int toY;
-
+    
 	MatchList matches;
 };
 
 typedef std::list<Move> MoveList;
 
 class GemField : public Node {
-
+    
 public:
+    // init
 	GemField();
 	~GemField();
-
+    
+    virtual bool init();
+    CREATE_FUNC(GemField);
+    
+    // delegation stuff
 	void addWatcher(FieldWatcherDelegate *watcher);
-
+    
+    // debug
 	void print();
 	void printMask();
-
+    
+    // interface to operate the field
 	void swipeAction(Point startCoordinates, int direction);
 	void clickAction(Point clickCoordinates);
 	
@@ -76,56 +83,57 @@ public:
 private:
 	MatchList findMatches();
 	MatchList findMatchesInLine(int fromX, int fromY, int toX, int toY);
-
+    
 	void selectGem(int x, int y);
 	void deselectGem(int x, int y);
-
-	void swapGems(int fromX, int fromY, int toX, int toY);	
+    
+	void swapGems(int fromX, int fromY, int toX, int toY);
 	void swapGemsIndices(int fromX, int fromY, int toX, int toY);
 	void moveGem(int fromX, int fromY, int toX, int toY, int rowsToWait = 0);
-
+    
 	void freezeGem(int x, int y, int power);
 	void removeGem(int x, int y);
-
+    
+	void destroyMatchedGems();
+	void destroyLine(int fromX, int fromY, int toX, int toY, bool destroyTransformed = true);
 	void destroyGem(int x, int y);
-	void destroyLine(int fromX, int fromY, int toX, int toY);
-
+    
 	bool hasAnyMatches();
-
-	void resolveMatches(); 
+    
+	void resolveMatches();
 	void resolveMatch(Match match);
-
+    
 	void refillLine(int lineNumber, int direction = D_Down, bool reset = true);
 	void refillField(bool reset = true);
-
-	bool gemsAreMoving();
-	
-    void update(float dt);
+    
+	bool areGemsBeingMoved();
+    
     void visit();
+	void update(float dt);
     
 	void resetField();
-
-
-	void addMoveToList(Move move, MoveList &list);
-	bool checkAvailableMoves();
 	void shuffleField(bool reset = true);
+    
+	bool checkAvailableMoves();
+	MoveList getMovesForLine(int fromX, int fromY, int toX, int toY);
+	Move getGemMove(int x, int y, Direction direction);
+	void addMoveToList(Move move, MoveList &list);
+    
+	bool compareGemsColors(int firstX, int firstY, int secondX, int secondY);
+    
+	void resetGemsState();
 private:
 	int fieldMask[kFieldHeight][kFieldWidth];
 	int freezeMask[kFieldHeight][kFieldWidth];
-	Gem *fieldGems[kFieldHeight][kFieldWidth];
+    
+	Gem* gems[kFieldHeight][kFieldWidth];
 	
 	Point *selectedGemCoordinates;
-
+    
 	FieldState state;
-
+    
 	int columnsWithMatches;
-
-	MoveList getMovesForLine(int fromX, int fromY, int toX, int toY);
-	Move getGemMove(int x, int y, Direction direction);
-
-	bool gemsHaveSameColour(int firstX, int firstY, int secondX, int secondY);
-
-
+    
 	FieldWatcherDelegatePool watchers; 
 };
 

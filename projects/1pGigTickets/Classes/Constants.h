@@ -19,9 +19,13 @@
 #define kAITurnDelay 0.5f
 #define kTipDelay 1.f
 
+#define kTransformationTime 0.25f
+
 #define kPlayersAmount 2
 
 #define kSpawnBonuses 0
+
+const bool kPreloadField = false;
 
 enum GemColour {
 	GC_Random,
