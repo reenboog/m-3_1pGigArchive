@@ -6,12 +6,12 @@
 
 #define kGemTypeAmount 6
 
-#define kTileSize 78.0f
+#define kTileSize 80.0f
 #define kSwapTime 0.1f
-#define kFallTime 0.1f
-#define kDestructionTime 0.1f
+#define kFallTime 0.07f
+#define kDestructionTime 0.06f
 
-#define kBonusChance 0.05f
+#define kBonusChance 0.0f
 
 #define kZOrderGem 2
 #define kZOrderTile 3
@@ -20,6 +20,9 @@
 #define kTipDelay 1.f
 
 #define kTransformationTime 0.25f
+
+#define kColumnsFallDelay 0.5
+#define kRowsFallDelay 0.7
 
 #define kPlayersAmount 2
 

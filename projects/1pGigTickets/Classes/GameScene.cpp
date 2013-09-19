@@ -36,12 +36,16 @@ bool GameScene::init() {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemPlectrum.plist");
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemSax.plist");
 
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemDeath.plist");
+
     Shared::loadAnimation("animations.plist", "guitar");
     Shared::loadAnimation("animations.plist", "keyboard");
     Shared::loadAnimation("animations.plist", "mark");
     Shared::loadAnimation("animations.plist", "mic");
     Shared::loadAnimation("animations.plist", "plectrum");
     Shared::loadAnimation("animations.plist", "sax");
+
+    Shared::loadAnimation("animations.plist", "gemDeath");
     //
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
@@ -59,7 +63,7 @@ bool GameScene::init() {
     this->addChild(field);
     
 	float posX = (visibleSize.width - kTileSize * (kFieldWidth)) / 2;
-	float posY = (visibleSize.height - kTileSize * (kFieldHeight)) / 2 - 20;
+	float posY = (visibleSize.height - kTileSize * (kFieldHeight)) / 2 - 31;
 	
     field->setPosition(posX, posY);
     

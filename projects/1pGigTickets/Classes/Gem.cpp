@@ -95,6 +95,7 @@ void Gem::reset(int x, int y, GemColour colour, GemType type) {
     
     setFlipX(false);
     setFlipY(false);
+    setScale(1.0);
     setOpacity(255);
     
     // Add bonus styling
@@ -108,9 +109,6 @@ void Gem::reset(int x, int y, GemColour colour, GemType type) {
         default:
             break;
     }
-    
-    // Reset scale back to normal
-    setScale(1);
 }
 
 #pragma mark - bonuses
@@ -131,13 +129,13 @@ void Gem::transformIntoBonus(GemType type) {
 				break;
 			case GT_LineHor:
 				restyle = Sequence::create(ScaleTo::create(kTransformationTime / 6.f, 1, 0),
-                                           FlipY::create(true),
+                                           //FlipY::create(true),
                                            ScaleTo::create(kTransformationTime / 6.f, 1, 1),
                                            NULL);
 				break;
 			case GT_LineVer:
 				restyle = Sequence::create(ScaleTo::create(kTransformationTime / 6.f, 0, 1),
-                                           FlipX::create(true),
+                                           //FlipX::create(true),
                                            ScaleTo::create(kTransformationTime / 6.f, 1, 1),
                                            NULL);
 				break;
@@ -221,7 +219,7 @@ void Gem::fallTo(int x, int y, int blocksToWait, int rowsToWait) {
 
 void Gem::moveTo(int x, int y, float time, bool goBack, int blocksToWait, int rowsToWait) {
 	Point newLocation = convertCoordinatesToPixels(x, y);
-	Action *wait = DelayTime::create(blocksToWait * kFallTime + rowsToWait * kFallTime * 0.5);
+	Action *wait = DelayTime::create(blocksToWait * kFallTime * kColumnsFallDelay + rowsToWait * kFallTime * kRowsFallDelay);
 	Action *move = nullptr;
 
 	if(blocksToWait >= 1) {
@@ -286,9 +284,9 @@ void Gem::onDestructionEnd(Object *sender) {
 
 void Gem::destroy() {
 	if(state != GS_Destroying) {
-		Action *enlarge = CCScaleTo::create(kDestructionTime / 3.f, 1.2f);
-		Action *shrink = CCScaleTo::create(kDestructionTime / 3.f * 2.f, 0);
-		Action *endDestruction = CallFuncN::create( CC_CALLBACK_1(Gem::onDestructionEnd, this));
+		Action *enlarge = ScaleTo::create(kDestructionTime / 3.f, 1.2f);
+		Action *shrink = ScaleTo::create(kDestructionTime / 3.f * 2.f, 0);
+		Action *endDestruction = CallFuncN::create(CC_CALLBACK_1(Gem::onDestructionEnd, this));
 		Action *destruction = Sequence::create((FiniteTimeAction*) enlarge,
 											   (FiniteTimeAction*) shrink,
 											   (FiniteTimeAction*) endDestruction, NULL);
@@ -296,6 +294,24 @@ void Gem::destroy() {
 		state = GS_Destroying;
         
 		runAction(destruction);
+        
+        if(this->getParent()) {
+            // apply destruction particle effect
+            Sprite *noteFog = Sprite::createWithSpriteFrameName("gemDeath0.png");
+            noteFog->setPosition(this->getPosition());
+            
+            Animate *destructionAnim = Animate::create(AnimationCache::getInstance()->animationByName("gemDeath"));
+            
+            auto cleanFogUp = CallFunc::create([=](){
+                noteFog->removeFromParent();
+            });
+            
+            noteFog->runAction(Sequence::create(destructionAnim, cleanFogUp, NULL));
+
+            // we're definetly sure that the gem has a parent
+            Node *parent = this->getParent();
+            parent->addChild(noteFog, this->getZOrder());
+        }
 	}
 }
 
