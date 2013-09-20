@@ -28,6 +28,8 @@ public:
 
 	GemState getState();
 	GemType getType();
+
+    void setGemColour(GemColour color);
 	GemColour getGemColour();
     void resetState();
 

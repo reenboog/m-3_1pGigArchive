@@ -59,7 +59,8 @@ enum GemType {
 	GT_Cross,
 	GT_LineHor,
 	GT_LineVer,
-	GT_Explosion
+	GT_Explosion,
+    GT_WildMaker
 };
 
 enum Direction {
@@ -87,10 +88,10 @@ enum FieldState {
 };
 
 #if(kSpawnBonuses == 1)
-    const GemType kVerticalMatchFourBonus = GT_Explosion;
-    const GemType kHorizontalMatchFourBonus = GT_Explosion;
-    const GemType kVerticalMatchFiveBonus = GT_LineVer;
-    const GemType kHorizontalMatchFiveBonus = GT_LineHor;
+    const GemType kVerticalMatchFourBonus = GT_WildMaker;
+    const GemType kHorizontalMatchFourBonus = GT_WildMaker;
+    const GemType kVerticalMatchFiveBonus = GT_WildMaker;
+    const GemType kHorizontalMatchFiveBonus = GT_WildMaker;
     const GemType kCrossMatchBonus = GT_Cross;
 #else
     const GemType kVerticalMatchFourBonus = GT_Colour;

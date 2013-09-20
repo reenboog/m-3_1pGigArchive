@@ -37,18 +37,7 @@ void Gem::init(int x, int y, GemColour colour, GemType type) {
 	this->type = type;
 	this->state = GS_Idle;
 
-	switch(colour) {
-		case GC_Guitar: fileName = "guitar0.png"; break;
-		case GC_Keyboard: fileName = "keyboard0.png"; break;
-        case GC_Microphone: fileName = "mic0.png"; break;
-		case GC_Plectrum: fileName = "plectrum0.png"; break;
-        case GC_Question: fileName = "mark0.png"; break;
-		case GC_Saxophone: fileName = "sax0.png"; break;
-
-		default: CCLOG("FUUUUCK, default gem colour!");
-	}
-
-    initWithSpriteFrameName(fileName.c_str());
+    setGemColour(colour);
 
 	setPosition(convertCoordinatesToPixels(x,y));
 	setZOrder(zOrder);
@@ -76,21 +65,8 @@ void Gem::reset(int x, int y, GemColour colour, GemType type) {
     
     this->stopAllActions();
     
-	// Get new sprite name
-	string fileName = "guitar0.png";
-
-    switch(colour) {
-		case GC_Guitar: fileName = "guitar0.png"; break;
-		case GC_Keyboard: fileName = "keyboard0.png"; break;
-        case GC_Microphone: fileName = "mic0.png"; break;
-		case GC_Plectrum: fileName = "plectrum0.png"; break;
-        case GC_Question: fileName = "mark0.png"; break;
-		case GC_Saxophone: fileName = "sax0.png"; break;
-            
-        default: CCLOG("default gem color in reset!");
-	}
+    setGemColour(colour);
     
-    setDisplayFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName(fileName.c_str()));
     setPosition(convertCoordinatesToPixels(x,y));
     
     setFlipX(false);
@@ -124,9 +100,11 @@ void Gem::transformIntoBonus(GemType type) {
 		Action *restyle;
         
 		switch(type) {
-			case GT_Cross:
-				restyle = FadeTo::create(kTransformationTime / 3.f, 125);
-				break;
+//			case GT_Cross:
+//				restyle = FadeTo::create(kTransformationTime / 3.f, 125);
+//				break;
+            case GT_WildMaker:
+                setGemColour(GC_Wild);
 			case GT_LineHor:
 				restyle = Sequence::create(ScaleTo::create(kTransformationTime / 6.f, 1, 0),
                                            //FlipY::create(true),
@@ -169,6 +147,7 @@ void Gem::onTransformationEnd(Object *sender) {
 		case GC_Plectrum: animationName = "plectrum"; break;
         case GC_Question: animationName = "mark"; break;
 		case GC_Saxophone: animationName = "sax"; break;
+        case GC_Wild: animationName = "note"; break;
             
         default: CCLOG("default gem color in reset!");
 	}
@@ -263,6 +242,7 @@ void Gem::match(MatchType matchType) {
                 type = GT_LineVer; break;
             case MT_Horizontal:
                 type = GT_LineHor; break;
+            default: type = GT_Colour;
         }
     }
 }
@@ -279,6 +259,29 @@ GemType Gem::getType() {
 
 GemColour Gem::getGemColour() {
 	return colour;
+}
+
+void Gem::setGemColour(GemColour color) {
+    this->colour = color;
+
+    string fileName = "";
+
+    switch(colour) {
+		case GC_Guitar: fileName = "guitar0.png"; break;
+		case GC_Keyboard: fileName = "keyboard0.png"; break;
+        case GC_Microphone: fileName = "mic0.png"; break;
+		case GC_Plectrum: fileName = "plectrum0.png"; break;
+        case GC_Question: fileName = "mark0.png"; break;
+		case GC_Saxophone: fileName = "sax0.png"; break;
+        case GC_Wild: fileName = "note0.png"; break;
+            
+        default: CCLOG("default gem color in reset!");
+	}
+    if(getTexture() == nullptr) {
+        initWithSpriteFrameName(fileName.c_str());
+    } else {
+        setDisplayFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName(fileName.c_str()));
+    }
 }
 
 void Gem::resetState() {

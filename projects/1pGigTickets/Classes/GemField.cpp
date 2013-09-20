@@ -253,7 +253,7 @@ MatchList GemField::findMatchesInLine(int fromX, int fromY, int toX, int toY) {
 	y += stepY;
     
 	while(x <= toX && y <= toY) {
-		while ((x <= toX && y <= toY) && fieldMask[y][x] == 1 && freezeMask[y][x] <= 1 && (gems[y][x]->getGemColour() == currentValue || (gems[y][x]->getGemColour() == GC_Wild  && chainLength >= 2) || currentValue == GC_Wild)) {
+		while((x <= toX && y <= toY) && fieldMask[y][x] == 1 && freezeMask[y][x] <= 1 && (gems[y][x]->getGemColour() == currentValue || (gems[y][x]->getGemColour() == GC_Wild  && chainLength >= 2) || currentValue == GC_Wild)) {
 			x += stepX;
 			y += stepY;
 			chainLength++;
@@ -307,8 +307,6 @@ void GemField::resolveMatch(const Match &match) {
 		(*it)->onGemsMatched(match.length, match.colour);
 	}
     
-    CCLOG("match: %i, %i", match.length, match.colour);
-    
 	int stepX = 1;
 	int stepY = 1;
     
@@ -348,7 +346,8 @@ void GemField::resolveMatch(const Match &match) {
 							gems[y][x]->transformIntoBonus(kHorizontalMatchFourBonus);
 						}
 						if(match.length >= 5) {
-							gems[y][x]->transformIntoBonus(kVerticalMatchFourBonus);
+							//gems[y][x]->transformIntoBonus(kVerticalMatchFourBonus);
+                            gems[y][x]->transformIntoBonus(kHorizontalMatchFiveBonus);
 						}
 					}
 					bonusWasAdded = true;

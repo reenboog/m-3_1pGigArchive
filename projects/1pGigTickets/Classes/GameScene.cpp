@@ -35,6 +35,7 @@ bool GameScene::init() {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemMic.plist");
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemPlectrum.plist");
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemSax.plist");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemNote.plist");
 
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemDeath.plist");
 
@@ -44,6 +45,7 @@ bool GameScene::init() {
     Shared::loadAnimation("animations.plist", "mic");
     Shared::loadAnimation("animations.plist", "plectrum");
     Shared::loadAnimation("animations.plist", "sax");
+    Shared::loadAnimation("animations.plist", "note");
 
     Shared::loadAnimation("animations.plist", "gemDeath");
     //
