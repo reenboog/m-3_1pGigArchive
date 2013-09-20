@@ -19,7 +19,7 @@ public:
 	void swapTo(int x, int y, bool goBack = false);
 	void fallTo(int x, int y, int blocksToWait = 0, int rowsToWait = 0);
 
-	void match();
+	void match(MatchType matchType = MT_None);
 	void destroy();
     void transformIntoBonus(GemType type);
 	void remove();

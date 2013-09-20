@@ -8,8 +8,8 @@
 
 #define kTileSize 80.0f
 #define kSwapTime 0.1f
-#define kFallTime 0.07f
-#define kDestructionTime 0.06f
+#define kFallTime 0.1f
+#define kDestructionTime 0.1f
 
 #define kBonusChance 0.0f
 
@@ -19,10 +19,10 @@
 #define kAITurnDelay 0.5f
 #define kTipDelay 1.f
 
-#define kTransformationTime 0.25f
+#define kTransformationTime 0.3f
 
-#define kColumnsFallDelay 0.5
-#define kRowsFallDelay 0.7
+#define kColumnsFallDelay 0
+#define kRowsFallDelay 0
 
 #define kPlayersAmount 2
 
@@ -69,6 +69,12 @@ enum Direction {
 	D_Right,
 };
 
+enum MatchType {
+    MT_Horizontal,
+    MT_Vertical,
+    MT_None
+};
+
 enum FieldState {
 	FS_Ready,
 	FS_Waiting,
@@ -81,8 +87,8 @@ enum FieldState {
 };
 
 #if(kSpawnBonuses == 1)
-    const GemType kVerticalMatchFourBonus = GT_LineVer;
-    const GemType kHorizontalMatchFourBonus = GT_LineHor;
+    const GemType kVerticalMatchFourBonus = GT_Explosion;
+    const GemType kHorizontalMatchFourBonus = GT_Explosion;
     const GemType kVerticalMatchFiveBonus = GT_LineVer;
     const GemType kHorizontalMatchFiveBonus = GT_LineHor;
     const GemType kCrossMatchBonus = GT_Cross;

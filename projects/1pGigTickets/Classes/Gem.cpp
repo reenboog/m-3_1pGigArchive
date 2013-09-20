@@ -199,7 +199,7 @@ void Gem::onMovementEnd(Object *sender) {
 
 void Gem::select() {
 	state = GS_Selected;
-	setScale(1.2f);
+	//setScale(1.2f);
 }
 
 void Gem::deselect() {
@@ -254,8 +254,17 @@ void Gem::moveTo(int x, int y, float time, bool goBack, int blocksToWait, int ro
 
 #pragma mark -
 
-void Gem::match() {
+void Gem::match(MatchType matchType) {
 	state = GS_Matched;
+    
+    if(type == GT_Explosion && matchType != MT_None) {
+        switch(matchType) {
+            case MT_Vertical:
+                type = GT_LineVer; break;
+            case MT_Horizontal:
+                type = GT_LineHor; break;
+        }
+    }
 }
 
 #pragma mark - set/get

@@ -52,7 +52,6 @@ bool GameScene::init() {
     Point origin = Director::getInstance()->getVisibleOrigin();
 
     back = Sprite::create("gameBack.png");
-
     back->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
     this->addChild(back, 0);

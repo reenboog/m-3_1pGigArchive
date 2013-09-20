@@ -331,7 +331,7 @@ void GemField::resolveMatch(const Match &match) {
 				// If it's a bonus, process it as usually, but turn the next gem into a bonus
 				if(gems[y][x]->getType() != GT_Colour) {
 					createBonusNext = true;
-					gems[y][x]->match();
+					gems[y][x]->match((MatchType)stepY);
 				} else {
                     // If it's a regular gem, turn it into a bonus
 					if(stepX == 0) {
@@ -377,19 +377,19 @@ void GemField::resolveMatch(const Match &match) {
 					bonusWasAdded = true;
 				} else {
                     // Otherwise just mark it as matched as usually
-					gems[y][x]->match();
+					gems[y][x]->match((MatchType)stepY);
 				}
 			}
 		} else {
             // If we come arcoss a gem that is already matched or turninig into a bonus
 			// Transform into bonus for cross
-			if(gems[y][x]->getType() != GT_Colour) {
-				createBonusNext = true;
-				gems[y][x]->match();
-			} else {
-				gems[y][x]->transformIntoBonus(kCrossMatchBonus);
-				bonusWasAdded = true;
-			}
+//			if(gems[y][x]->getType() != GT_Colour) {
+//				createBonusNext = true;
+//				gems[y][x]->match();
+//			} else {
+//				gems[y][x]->transformIntoBonus(kCrossMatchBonus);
+//				bonusWasAdded = true;
+//			}
 		}
 		y += stepY;
 		x += stepX;

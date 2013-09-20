@@ -49,7 +49,7 @@
 		<key>frames</key>
 		<string>0,1,2,3,4,5</string>
 		<key>delay</key>
-		<real>0.07099999999999999</real>
+		<real>0.1</real>
 	</dict>
 </dict>
 </plist>
