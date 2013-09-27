@@ -167,22 +167,22 @@ bool GemField::init() {
 		const int customField[kFieldHeight][kFieldWidth] = {
 			{2,3,4,2,1,4,2,3},
 			{3,4,2,3,5,2,3,2},
-			{4,1,1,4,5,3,2,3},
-			{5,5,5,1,5,2,3,4},
-			{3,4,2,3,2,3,4,2},
-			{4,2,3,1,3,4,2,3},
-            {4,2,3,1,3,4,2,3},
-            {4,2,3,1,3,4,2,3}
+			{4,1,1,4,1,3,2,3},
+			{1,5,5,1,5,2,3,4},
+			{3,4,2,3,5,3,4,2},
+			{1,2,3,3,1,2,1,3},
+            {4,1,1,2,2,1,3,1},
+            {4,2,3,1,2,3,3,2}
 		};
         
 		const int customFieldType[kFieldHeight][kFieldWidth] = {
 			{0,0,0,0,0,0,0,0},
+			{0,0,0,0,4,0,0,0},
 			{0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0},
+            {0,0,0,0,4,0,0,0},
             {0,0,0,0,0,0,0,0}
 		};
         
@@ -253,7 +253,7 @@ MatchList GemField::findMatchesInLine(int fromX, int fromY, int toX, int toY) {
 	y += stepY;
     
 	while(x <= toX && y <= toY) {
-		while((x <= toX && y <= toY) && fieldMask[y][x] == 1 && freezeMask[y][x] <= 1 && (gems[y][x]->getGemColour() == currentValue || (gems[y][x]->getGemColour() == GC_Wild  && chainLength >= 2) || currentValue == GC_Wild)) {
+		while((x <= toX && y <= toY) && fieldMask[y][x] == 1 && freezeMask[y][x] <= 1 && (gems[y][x]->getGemColour() == currentValue && currentValue != GC_Wild)) {
 			x += stepX;
 			y += stepY;
 			chainLength++;
@@ -440,6 +440,8 @@ void GemField::destroyGem(int x, int y) {
 				}
 				if(gems[y][x]->getType() != GT_Colour) {
 					switch(gems[y][x]->getType()) {
+                        case GT_Explosion:
+                            gems[y][x]->transformIntoBonus((GemType)(GT_LineHor + (GemType)CCRANDOM_0_1()));
                         case GT_Cross:
                             gems[y][x]->destroy();
                             destroyLine(x, 0, x, kFieldHeight - 1);
@@ -484,6 +486,10 @@ void GemField::swapGems(int fromX, int fromY, int toX, int toY) {
 	//Pointers for gems we will swap
 	first = gems[fromY][fromX];
 	second = gems[toY][toX];
+    
+    if(first->getType() && second->getType()) {
+        
+    }
     
 	swapGemsIndices(fromX, fromY, toX, toY);
     

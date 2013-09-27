@@ -106,16 +106,16 @@ void Gem::transformIntoBonus(GemType type) {
             case GT_WildMaker:
                 setGemColour(GC_Wild);
 			case GT_LineHor:
-				restyle = Sequence::create(ScaleTo::create(kTransformationTime / 6.f, 1, 0),
-                                           //FlipY::create(true),
-                                           ScaleTo::create(kTransformationTime / 6.f, 1, 1),
-                                           NULL);
+				//restyle = Sequence::create(ScaleTo::create(kTransformationTime / 6.f, 1, 0),
+                //                           //FlipY::create(true),
+                //                           ScaleTo::create(kTransformationTime / 6.f, 1, 1),
+                //                           NULL);
 				break;
 			case GT_LineVer:
-				restyle = Sequence::create(ScaleTo::create(kTransformationTime / 6.f, 0, 1),
+				//restyle = Sequence::create(ScaleTo::create(kTransformationTime / 6.f, 0, 1),
                                            //FlipX::create(true),
-                                           ScaleTo::create(kTransformationTime / 6.f, 1, 1),
-                                           NULL);
+                //                           ScaleTo::create(kTransformationTime / 6.f, 1, 1),
+                //                           NULL);
 				break;
 			default:
 				restyle = DelayTime::create(kTransformationTime / 3.f);
@@ -124,9 +124,9 @@ void Gem::transformIntoBonus(GemType type) {
         
 		Action *shrink = ScaleTo::create(kTransformationTime / 3.f, 1);
 		Action *endTransformation = CallFuncN::create(CC_CALLBACK_1(Gem::onTransformationEnd, this));
-		Action *destruction = Sequence::create((FiniteTimeAction*) enlarge,
-                                               (FiniteTimeAction*) restyle,
-                                               (FiniteTimeAction*) shrink, 
+		Action *destruction = Sequence::create(//(FiniteTimeAction*) enlarge,
+                                               //(FiniteTimeAction*) restyle,
+                                               //(FiniteTimeAction*) shrink,
                                                (FiniteTimeAction*) endTransformation,
                                                NULL);
         runAction(destruction);
@@ -201,8 +201,7 @@ void Gem::moveTo(int x, int y, float time, bool goBack, int blocksToWait, int ro
 	Action *wait = DelayTime::create(blocksToWait * kFallTime * kColumnsFallDelay + rowsToWait * kFallTime * kRowsFallDelay);
 	Action *move = nullptr;
 
-	if(blocksToWait >= 1) {
-		
+    if(blocksToWait >= 1 || (this->getPosition().getDistance(newLocation) / kTileSize) > 1) {
 		Action *moveDown = MoveTo::create((this->getPosition().getDistance(newLocation) / kTileSize) * time * 0.7f,
                                           newLocation + Point(0, kTileSize * 0.1f));
 

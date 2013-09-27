@@ -88,8 +88,8 @@ enum FieldState {
 };
 
 #if(kSpawnBonuses == 1)
-    const GemType kVerticalMatchFourBonus = GT_WildMaker;
-    const GemType kHorizontalMatchFourBonus = GT_WildMaker;
+    const GemType kVerticalMatchFourBonus = GT_Explosion;
+    const GemType kHorizontalMatchFourBonus = GT_Explosion;
     const GemType kVerticalMatchFiveBonus = GT_WildMaker;
     const GemType kHorizontalMatchFiveBonus = GT_WildMaker;
     const GemType kCrossMatchBonus = GT_Cross;
