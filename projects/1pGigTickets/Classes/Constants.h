@@ -38,7 +38,7 @@ enum GemColour {
 	GC_Saxophone,
 	GC_Plectrum,
     GC_Question,
-	GC_Wild
+	GC_Note
 };
 
 enum GemState {
@@ -60,7 +60,7 @@ enum GemType {
 	GT_LineHor,
 	GT_LineVer,
 	GT_Explosion,
-    GT_WildMaker
+    GT_NoteMaker
 };
 
 enum Direction {

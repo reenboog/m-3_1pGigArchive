@@ -103,8 +103,8 @@ void Gem::transformIntoBonus(GemType type) {
 //			case GT_Cross:
 //				restyle = FadeTo::create(kTransformationTime / 3.f, 125);
 //				break;
-            case GT_WildMaker:
-                setGemColour(GC_Wild);
+            case GT_NoteMaker:
+                setGemColour(GC_Note);
 			case GT_LineHor:
 				//restyle = Sequence::create(ScaleTo::create(kTransformationTime / 6.f, 1, 0),
                 //                           //FlipY::create(true),
@@ -147,7 +147,7 @@ void Gem::onTransformationEnd(Object *sender) {
 		case GC_Plectrum: animationName = "plectrum"; break;
         case GC_Question: animationName = "mark"; break;
 		case GC_Saxophone: animationName = "sax"; break;
-        case GC_Wild: animationName = "note"; break;
+        case GC_Note: animationName = "note"; break;
             
         default: CCLOG("default gem color in reset!");
 	}
@@ -272,7 +272,7 @@ void Gem::setGemColour(GemColour color) {
 		case GC_Plectrum: fileName = "plectrum0.png"; break;
         case GC_Question: fileName = "mark0.png"; break;
 		case GC_Saxophone: fileName = "sax0.png"; break;
-        case GC_Wild: fileName = "note0.png"; break;
+        case GC_Note: fileName = "note0.png"; break;
             
         default: CCLOG("default gem color in reset!");
 	}
