@@ -369,7 +369,7 @@ void GemField::resolveMatch(const Match &match) {
 							gems[y][x]->transformIntoBonus(kHorizontalMatchFourBonus);
 						}
 						if(match.length >= 5) {
-							gems[y][x]->transformIntoBonus(kVerticalMatchFourBonus);
+							gems[y][x]->transformIntoBonus(kHorizontalMatchFiveBonus);
 						}
 					}
 					createBonusNext = false;
