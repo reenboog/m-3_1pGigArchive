@@ -28,7 +28,7 @@ Gem::~Gem() {
 void Gem::init(int x, int y, GemColour colour, GemType type) {
 	// Get the file name for the gem image
 	string fileName = "";
-	int zOrder = kZOrderGem;
+	int zOrder = zGem;
 	if(colour == GC_Random) {
 		colour =  static_cast<GemColour>((int) ((CCRANDOM_0_1() * kGemTypeAmount) + 1));
 	}
@@ -352,7 +352,7 @@ void Gem::setFreeze(int power) {
 	CCLOG("%i", power);
 	state = GS_Immovable;
 	runAction(ScaleTo::create(kDestructionTime, scale, scale));
-	setZOrder(kZOrderTile);
+	setZOrder(zTile);
 }
 
 #pragma mark - internals

@@ -89,7 +89,7 @@ bool GemField::init() {
 			} else {
 //				// Fill holes with tiles
 //				Sprite *tile = Sprite::create("tile.png");
-//				tile->setZOrder(kZOrderTile);
+//				tile->setZOrder(zTile);
 //				tile->setPosition(Gem::convertCoordinatesToPixels(x, y));
 //				this->addChild(tile);
 			}
@@ -387,24 +387,41 @@ void GemField::destroyGem(int x, int y) {
                         gems[y][x]->transformIntoBonus((GemType)(GT_LineHor + (GemType)CCRANDOM_0_1()));
                     }
                     
+                    
+                    Sprite *lightning = Sprite::createWithSpriteFrameName("lightning0.png");
+                    this->addChild(lightning, zLighting);
+
+                    Point lightningPos = Gem::convertCoordinatesToPixels(x, y);
+                    
 					switch(gems[y][x]->getType()) {
-                        case GT_Cross:
-                            gems[y][x]->destroy();
-                            destroyLine(x, 0, x, kFieldHeight - 1);
-                            destroyLine(0, y, kFieldWidth - 1, y);
-                            break;
+//                        case GT_Cross:
+//                            gems[y][x]->destroy();
+//                            destroyLine(x, 0, x, kFieldHeight - 1);
+//                            destroyLine(0, y, kFieldWidth - 1, y);
+//                            break;
                         case GT_LineHor :
                             gems[y][x]->destroy();
                             destroyLine(0, y, kFieldWidth - 1, y);
+                            
+                            lightningPos.x = (kFieldWidth * kTileSize) / 2.0f;
+                            lightning->setRotation(90);
                             break;
                         case GT_LineVer :
                             gems[y][x]->destroy();
                             destroyLine(x, 0, x, kFieldHeight - 1);
+                            
+                            lightningPos.y = (kFieldHeight * kTileSize) / 2.0f;
                             break;
                         default:
                             gems[y][x]->destroy();
                             break;
 					}
+                    
+                    lightning->setPosition(lightningPos);
+                    lightning->runAction(Sequence::create(Animate::create(AnimationCache::getInstance()->animationByName("lightning")),
+                                                          CallFunc::create([=](){
+                                                                lightning->removeFromParent();
+                                                          }), NULL));
 				}
                 
                 int score = this->scoreForGem(y, x);
@@ -705,9 +722,9 @@ void GemField::visit() {
     Point pos = this->getPosition();
     int x = 0, y = 0;
     
-    y = abs(pos.y - kTileSize * kFieldHeight / 4);
+    y = abs(pos.y - kTileSize * kFieldHeight / 4) + 140;
     
-    glScissor(x, y, visibleSize.width, kTileSize * (kFieldHeight + 2.2));
+    glScissor(x, y, visibleSize.width, kTileSize * (kFieldHeight + 2.2) - 155);
     
     Node::visit();
     

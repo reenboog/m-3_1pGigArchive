@@ -22,7 +22,7 @@
         <key>dataFormat</key>
         <string>cocos2d</string>
         <key>textureFileName</key>
-        <filename>gemDeath.png</filename>
+        <filename>effects.png</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -99,7 +99,7 @@
             <key>packageName</key>
             <string>Texture</string>
             <key>javaFileName</key>
-            <filename>gemDeath.java</filename>
+            <filename>effects.java</filename>
             <key>wrap</key>
             <struct type="AndEngineWrap">
                 <key>s</key>
@@ -111,7 +111,7 @@
             <enum type="AndEngine::MagFilter">MagLinear</enum>
         </struct>
         <key>dataFileName</key>
-        <filename>gemDeath.plist</filename>
+        <filename>effects.plist</filename>
         <key>mainExtension</key>
         <string></string>
         <key>forceIdenticalLayout</key>
@@ -141,6 +141,19 @@
         </struct>
         <key>fileList</key>
         <array>
+            <filename>gemBlast0.png</filename>
+            <filename>gemBlast1.png</filename>
+            <filename>gemBlast2.png</filename>
+            <filename>gemBlast3.png</filename>
+            <filename>gemBlast4.png</filename>
+            <filename>gemBlast5.png</filename>
+            <filename>gemBlast6.png</filename>
+            <filename>gemBlast7.png</filename>
+            <filename>gemBlast8.png</filename>
+            <filename>lightning0.png</filename>
+            <filename>lightning1.png</filename>
+            <filename>lightning2.png</filename>
+            <filename>lightning3.png</filename>
             <filename>gemDeath0.png</filename>
             <filename>gemDeath1.png</filename>
             <filename>gemDeath2.png</filename>

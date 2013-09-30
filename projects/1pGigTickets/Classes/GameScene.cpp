@@ -39,7 +39,7 @@ bool GameScene::init() {
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemSax.plist");
     SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemNote.plist");
 
-    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/gemDeath.plist");
+    SpriteFrameCache::getInstance()->addSpriteFramesWithFile("gems/effects.plist");
 
     Shared::loadAnimation("animations.plist", "guitar");
     Shared::loadAnimation("animations.plist", "keyboard");
@@ -50,6 +50,8 @@ bool GameScene::init() {
     Shared::loadAnimation("animations.plist", "note");
 
     Shared::loadAnimation("animations.plist", "gemDeath");
+    Shared::loadAnimation("animations.plist", "gemBlast");
+    Shared::loadAnimation("animations.plist", "lightning");
     //
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
@@ -137,7 +139,7 @@ void GameScene::popMatchScoresUpAtPoint(int score, int x, int y) {
     scoreString.appendWithFormat("%i", score);
 
     LabelBMFont *label = LabelBMFont::create(scoreString.getCString(), "allerScore.fnt");
-    this->addChild(label, 100);
+    this->addChild(label, zMatchScore);
     
     label->setPosition({x, y});
     label->setScale(0.6);

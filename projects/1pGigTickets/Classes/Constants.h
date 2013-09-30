@@ -13,8 +13,10 @@
 
 #define kBonusChance 0.0f
 
-#define kZOrderGem 2
-#define kZOrderTile 3
+#define zGem 2
+#define zTile 3
+#define zLighting 90
+#define zMatchScore 100
 
 #define kAITurnDelay 0.5f
 #define kTipDelay 1.f
