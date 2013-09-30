@@ -97,81 +97,15 @@ bool GemField::init() {
 	}
         
     state = FS_Ready;
-    
-	// Test specific loadouts here
-    
-	/*
-     // Field with no matches (and no turns)
-     {2,3,4,2,3,4,2,3,4},
-     {3,4,2,3,4,2,3,4,2},
-     {4,2,3,4,2,3,4,2,3},
-     {2,3,4,2,3,4,2,3,4},
-     {3,4,2,3,4,2,3,4,2},
-     {4,2,3,4,2,3,4,2,3}
-     
-     // Square of doom
-     {2,3,4,2,3,4,2,3,4},
-     {3,4,2,3,4,2,3,4,2},
-     {4,2,3,1,1,1,4,2,3},
-     {2,3,4,1,1,1,2,3,4},
-     {3,4,2,1,1,1,3,4,2},
-     {4,2,3,4,2,3,4,2,3}
-     
-     // Cross that is also a match 5
-     {2,3,4,2,3,4,2,3,4},
-     {3,4,2,1,4,2,3,4,2},
-     {4,1,1,4,1,1,4,2,3},
-     {2,3,4,1,3,4,2,3,4},
-     {3,4,2,1,4,2,3,4,2},
-     {4,2,3,4,2,3,4,2,3}
-     
-     // A tricky situation
-     {2,3,4,2,1,4,2,3,4},
-     {3,4,2,3,5,2,3,4,2},
-     {4,1,1,4,5,3,4,2,3},
-     {5,5,5,1,5,1,1,3,4},
-     {3,4,2,3,1,2,3,4,2},
-     {4,2,3,4,1,3,4,2,3}
-     
-     // Match 4 by bonus
-     {2,3,4,2,3,4,2,3,4},
-     {3,4,2,3,4,2,3,4,2},
-     {4,1,1,4,1,3,4,2,3},
-     {2,3,4,1,3,4,2,3,4},
-     {3,4,2,3,4,2,3,4,2},
-     {4,2,3,4,2,3,4,2,3}
-     
-     {0,0,0,0,0,0,0,0,0},
-     {0,0,0,0,0,0,0,0,0},
-     {0,0,0,0,0,0,0,0,0},
-     {0,0,0,1,0,0,0,0,0},
-     {0,0,0,0,0,0,0,0,0},
-     {0,0,0,0,0,0,0,0,0}
-     
-     // Match 4 which has a bonus
-     {2,3,4,2,3,4,2,3,4},
-     {3,4,2,3,4,2,3,4,2},
-     {4,1,1,4,1,3,4,2,3},
-     {2,3,4,1,3,4,2,3,4},
-     {3,4,2,3,4,2,3,4,2},
-     {4,2,3,4,2,3,4,2,3}
-     
-     {0,0,0,0,0,0,0,0,0},
-     {0,0,0,0,0,0,0,0,0},
-     {0,0,1,0,0,0,0,0,0},
-     {0,0,0,0,0,0,0,0,0},
-     {0,0,0,0,0,0,0,0,0},
-     {0,0,0,0,0,0,0,0,0}
-     */
-	if(kPreloadField) {
+   	if(kPreloadField) {
 		const int customField[kFieldHeight][kFieldWidth] = {
 			{2,3,4,2,1,4,2,3},
 			{3,4,2,3,5,2,3,2},
 			{4,1,1,4,1,3,2,3},
-			{1,5,5,1,5,2,3,4},
-			{3,4,2,3,5,3,4,2},
-			{1,2,3,3,1,2,1,3},
-            {4,1,1,2,2,1,3,1},
+			{1,5,3,1,5,2,3,4},
+			{3,4,3,3,5,3,4,2},
+			{1,2,1,3,1,2,1,3},
+            {4,1,3,2,2,1,3,1},
             {4,2,3,1,2,3,3,2}
 		};
         
@@ -182,7 +116,7 @@ bool GemField::init() {
 			{0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0},
-            {0,0,0,0,4,0,0,0},
+            {0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0}
 		};
         
@@ -253,7 +187,8 @@ MatchList GemField::findMatchesInLine(int fromX, int fromY, int toX, int toY) {
 	y += stepY;
     
 	while(x <= toX && y <= toY) {
-		while((x <= toX && y <= toY) && fieldMask[y][x] == 1 && freezeMask[y][x] <= 1 && (gems[y][x]->getGemColour() == currentValue && currentValue != GC_Note)) {
+		while((x <= toX && y <= toY) && fieldMask[y][x] == 1 && freezeMask[y][x] <= 1 && (gems[y][x]->getGemColour() == currentValue) && currentValue != GC_Note) {
+
 			x += stepX;
 			y += stepY;
 			chainLength++;
@@ -346,7 +281,6 @@ void GemField::resolveMatch(const Match &match) {
 							gems[y][x]->transformIntoBonus(kHorizontalMatchFourBonus);
 						}
 						if(match.length >= 5) {
-							//gems[y][x]->transformIntoBonus(kVerticalMatchFourBonus);
                             gems[y][x]->transformIntoBonus(kHorizontalMatchFiveBonus);
 						}
 					}
@@ -1028,7 +962,9 @@ MoveList GemField::getMovesForLine(int fromX, int fromY, int toX, int toY) {
     
     
 	while(x <= toX + 1 && y <= toY + 1) {
-		while((x <= toX && y <= toY) && fieldMask[y][x] == 1 && freezeMask[y][x] <= 1 && (gems[y][x]->getGemColour() == currentValue || (gems[y][x]->getGemColour() == GC_Note  && chainLength >= 2) || currentValue == GC_Note)) {
+//		while((x <= toX && y <= toY) && fieldMask[y][x] == 1 && freezeMask[y][x] <= 1 && (gems[y][x]->getGemColour() == currentValue || (gems[y][x]->getGemColour() == GC_Note  && chainLength >= 2) || currentValue == GC_Note)) {
+		while((x <= toX && y <= toY) && fieldMask[y][x] == 1 && freezeMask[y][x] <= 1 && (gems[y][x]->getGemColour() == currentValue && currentValue != GC_Note)) {
+            
 			x += stepX;
 			y += stepY;
 			chainLength++;

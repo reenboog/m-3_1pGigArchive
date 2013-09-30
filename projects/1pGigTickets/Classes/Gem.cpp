@@ -42,16 +42,16 @@ void Gem::init(int x, int y, GemColour colour, GemType type) {
 	setPosition(convertCoordinatesToPixels(x,y));
 	setZOrder(zOrder);
 
-	switch(type) {
-		case GT_Cross: setOpacity(125);
-				break;
-		case GT_LineHor: setFlipY(true);
-				break;
-		case GT_LineVer: setFlipX(true);
-				break;
-		default:
-				break;
-	}
+//	switch(type) {
+//		case GT_Cross: setOpacity(125);
+//				break;
+//		case GT_LineHor: setFlipY(true);
+//				break;
+//		case GT_LineVer: setFlipX(true);
+//				break;
+//		default:
+//				break;
+//	}
 }
 
 void Gem::reset(int x, int y, GemColour colour, GemType type) {
@@ -72,19 +72,20 @@ void Gem::reset(int x, int y, GemColour colour, GemType type) {
     setFlipX(false);
     setFlipY(false);
     setScale(1.0);
+    setRotation(0);
     setOpacity(255);
     
     // Add bonus styling
-    switch(type) {
-        case GT_Cross: setOpacity(125);
-            break;
-        case GT_LineHor: setFlipY(true);
-            break;
-        case GT_LineVer: setFlipX(true);
-            break;
-        default:
-            break;
-    }
+//    switch(type) {
+//        case GT_Cross: setOpacity(125);
+//            break;
+//        case GT_LineHor: setFlipY(true);
+//            break;
+//        case GT_LineVer: setFlipX(true);
+//            break;
+//        default:
+//            break;
+//    }
 }
 
 #pragma mark - bonuses
@@ -97,7 +98,7 @@ void Gem::transformIntoBonus(GemType type) {
 		//applyBonusStyling();
         
 		Action *enlarge = ScaleTo::create(kTransformationTime / 3.f, 1.5f);
-		Action *restyle;
+		Action *restyle = nullptr;
         
 		switch(type) {
 //			case GT_Cross:
@@ -105,6 +106,7 @@ void Gem::transformIntoBonus(GemType type) {
 //				break;
             case GT_NoteMaker:
                 setGemColour(GC_Note);
+                break;
 			case GT_LineHor:
 				//restyle = Sequence::create(ScaleTo::create(kTransformationTime / 6.f, 1, 0),
                 //                           //FlipY::create(true),
@@ -140,17 +142,21 @@ void Gem::onTransformationEnd(Object *sender) {
     
     string animationName = "";
     
-    switch(colour) {
-		case GC_Guitar: animationName = "guitar"; break;
-		case GC_Keyboard: animationName = "keyboard"; break;
-        case GC_Microphone: animationName = "mic"; break;
-		case GC_Plectrum: animationName = "plectrum"; break;
-        case GC_Question: animationName = "mark"; break;
-		case GC_Saxophone: animationName = "sax"; break;
-        case GC_Note: animationName = "note"; break;
-            
-        default: CCLOG("default gem color in reset!");
-	}
+    if(type != GT_NoteMaker) {
+        switch(colour) {
+            case GC_Guitar: animationName = "guitar"; break;
+            case GC_Keyboard: animationName = "keyboard"; break;
+            case GC_Microphone: animationName = "mic"; break;
+            case GC_Plectrum: animationName = "plectrum"; break;
+            case GC_Question: animationName = "mark"; break;
+            case GC_Saxophone: animationName = "sax"; break;
+            //case GC_Note: animationName = "note"; break;
+                
+            default: CCLOG("default gem color in reset!");
+        }
+    } else {
+        animationName = "note";
+    }
     
     Animate *action = Animate::create(AnimationCache::getInstance()->animationByName(animationName.c_str()));
     runAction(RepeatForever::create(action));
@@ -261,11 +267,9 @@ GemColour Gem::getGemColour() {
 }
 
 void Gem::setGemColour(GemColour color) {
-    this->colour = color;
-
     string fileName = "";
 
-    switch(colour) {
+    switch(color) {
 		case GC_Guitar: fileName = "guitar0.png"; break;
 		case GC_Keyboard: fileName = "keyboard0.png"; break;
         case GC_Microphone: fileName = "mic0.png"; break;
@@ -280,6 +284,10 @@ void Gem::setGemColour(GemColour color) {
         initWithSpriteFrameName(fileName.c_str());
     } else {
         setDisplayFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName(fileName.c_str()));
+    }
+    
+    if(color != GC_Note) {
+        this->colour = color;
     }
 }
 
