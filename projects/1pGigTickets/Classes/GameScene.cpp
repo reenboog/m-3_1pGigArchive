@@ -3,6 +3,8 @@
 #include "GemField.h"
 #include "Shared.h"
 
+using std::string;
+
 #pragma mark - cocos2d stuff
 
 GameScene::~GameScene() {
@@ -81,12 +83,30 @@ bool GameScene::init() {
 
 #pragma mark - field watcher delegate
 
-void GameScene::onGemDestroyed(GemColour colour) {
+void GameScene::onGemDestroyed(GemColour colour, int x, int y, int score) {
 	// get is destroyed
+    
+    Point worldPos = this->convertFieldCoordinatesToWorldLocation({x, y});
+    this->popMatchScoresUpAtPoint(score, worldPos.x, worldPos.y);
 }
 
-void GameScene::onGemsMatched(int length, GemColour colour) {
+void GameScene::onGemsMatched(int length, GemColour colour, int startX, int startY, int endX, int endY, int score) {
 	// on match
+    
+    float stepX = 1.0f;
+    float stepY = -1.0f;
+    
+    if(startX == endX) {
+		stepX = 0.0f;
+	} else {
+		stepY = 0.0f;
+	}
+        
+    Point worldPos = this->convertFieldCoordinatesToWorldLocation({startX, startY});
+    
+    worldPos = worldPos + Point(stepX * ((length - 1) * kTileSize) / 2.0f, stepY * ((length - 1) * kTileSize) / 2.0f);
+    
+    this->popMatchScoresUpAtPoint(score, worldPos.x, worldPos.y);
 }
 
 void GameScene::onGemsToBeShuffled() {
@@ -108,6 +128,33 @@ void GameScene::onGemsStartedSwapping() {
 }
 
 #pragma mark - update logic
+
+#pragma mark - 
+
+void GameScene::popMatchScoresUpAtPoint(int score, int x, int y) {
+    
+    String scoreString = "";
+    scoreString.appendWithFormat("%i", score);
+
+    LabelBMFont *label = LabelBMFont::create(scoreString.getCString(), "allerScore.fnt");
+    this->addChild(label, 100);
+    
+    label->setPosition({x, y});
+    label->setScale(0.6);
+    label->setOpacity(0);
+    
+    label->runAction(Sequence::create(DelayTime::create(0.3),
+                                      Spawn::create(EaseBackIn::create(MoveBy::create(0.3, {0, 50})),
+                                                    FadeIn::create(0.1),
+                                                    ScaleTo::create(0.14, 1.0f), NULL),
+                                      DelayTime::create(0.1),
+                                      FadeOut::create(0.2),
+                                      CallFunc::create([=](){
+        label->removeFromParent();
+    }),
+                                      NULL));
+
+}
 
 void GameScene::update(float dt) {
     
@@ -164,6 +211,11 @@ void GameScene::ccTouchEnded(Touch *touch, Event *event) {
 
 #pragma mark -
 
-Point GameScene::convertLocationToFieldCoordinates(Point point) {
+Point GameScene::convertLocationToFieldCoordinates(const Point &point) {
 	return Point((int) ((point.x - field->getPositionX()) / kTileSize), (int) (kFieldHeight - (point.y - field->getPositionY()) / kTileSize));
+}
+
+Point GameScene::convertFieldCoordinatesToWorldLocation(const Point &point) {
+    return Point(point.x * kTileSize + field->getPositionX() + kTileSize / 2.0,
+                 (kFieldHeight - point.y) * kTileSize + field->getPositionY() - kTileSize / 2.0);
 }

@@ -3,7 +3,7 @@
 #include <random>
 
 #include "Gem.h"
-//#include "Player.h"
+#include "GameConfig.h"
 
 using std::string;
 
@@ -238,8 +238,18 @@ void GemField::resolveMatches() {
 void GemField::resolveMatch(const Match &match) {
 	bool bonusWasAdded = false;
 	bool createBonusNext = false;
+    
+    // get match points
+    int score = 0;
+    
+    for(int i = match.fromY; i <= match.toY; ++i) {
+        for(int j = match.fromX; j <= match.toX; ++j) {
+            score += this->scoreForGem(j, i);
+        }
+    }
+    
 	for(FieldWatcherDelegatePool::iterator it = watchers.begin(); it != watchers.end(); it++) {
-		(*it)->onGemsMatched(match.length, match.colour);
+		(*it)->onGemsMatched(match.length, match.colour, match.fromX, match.fromY, match.toX, match.toY, score);
 	}
     
 	int stepX = 1;
@@ -396,9 +406,12 @@ void GemField::destroyGem(int x, int y) {
                             break;
 					}
 				}
+                
+                int score = this->scoreForGem(y, x);
+                
 				if(gems[y][x]->getState() != GS_Matched) {
 					for(FieldWatcherDelegatePool::iterator it = watchers.begin(); it != watchers.end(); it++) {
-						(*it)->onGemDestroyed(gems[y][x]->getGemColour());
+						(*it)->onGemDestroyed(gems[y][x]->getGemColour(), x, y, score);
 					}
 				}
 				gems[y][x]->destroy();
@@ -575,6 +588,30 @@ void GemField::deselectGem(int x, int y) {
 }
 
 #pragma mark - public API for players
+
+int GemField::scoreForGem(int x, int y) {
+    Gem *gem = gems[y][x];
+    int score = 0;
+    
+    if(gem && fieldMask[y][x] != 0) {
+        switch(gem->getType()) {
+            case GT_Colour:
+                score = GameConfig::sharedInstance()->baseIconValue;
+                break;
+            case GT_Explosion:
+            case GT_LineHor:
+            case GT_LineVer:
+            case GT_Cross:
+                score = GameConfig::sharedInstance()->fourInRowIconValue;
+                break;
+            case GT_NoteMaker:
+                score = GameConfig::sharedInstance()->noteIconValue;
+                break;
+        }
+    }
+
+    return score;
+}
 
 void GemField::swipeAction(const Point &startCoordinates, int direction) {
 	int fromX = startCoordinates.x;

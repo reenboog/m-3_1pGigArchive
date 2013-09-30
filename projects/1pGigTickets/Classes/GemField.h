@@ -77,6 +77,8 @@ public:
     void shuffleField(bool reset = true);
     
     // interface to operate the field
+    int scoreForGem(int x, int y);
+    
 	void swipeAction(const Point &startCoordinates, int direction);
 	void clickAction(const Point &clickCoordinates);
     

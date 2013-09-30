@@ -14,6 +14,10 @@
 #define kQuizTimer          5
 #define kQMultiplier        5
 
+#define kBaseIconValue      50
+#define kFourInRowIconValue 500
+#define kNoteIconValue      100
+
 class GameConfig {
 private:
     GameConfig();
@@ -32,6 +36,10 @@ public:
     float gameTimer;
     float quizTimer;
     float qMultiplier;
+    
+    float baseIconValue;
+    float fourInRowIconValue;
+    float noteIconValue;
 };
 
 #endif /* defined(___pGigTickets__GameConfig__) */

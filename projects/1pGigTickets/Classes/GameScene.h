@@ -24,11 +24,16 @@ public:
 	virtual void ccTouchMoved(Touch *touch, Event *event);
     
     // touch extras
-    Point convertLocationToFieldCoordinates(Point point);
+    Point convertLocationToFieldCoordinates(const Point &point);
+    Point convertFieldCoordinatesToWorldLocation(const Point &point);
+    
+    //some gui
+    
+    void popMatchScoresUpAtPoint(int score, int x, int y);
 
     // field watcher delegate methods
-    virtual void onGemDestroyed(GemColour colour);
-	virtual void onGemsMatched(int length, GemColour colour);
+    virtual void onGemDestroyed(GemColour colour, int x, int y, int score);
+	virtual void onGemsMatched(int length, GemColour colour, int startX, int startY, int endX, int endY, int score);
 	virtual void onGemsToBeShuffled();
 	virtual void onGemsStartedSwapping();
 	virtual void onGemsFinishedMoving();
