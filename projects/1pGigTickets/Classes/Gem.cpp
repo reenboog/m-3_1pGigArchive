@@ -194,15 +194,15 @@ void Gem::deselect() {
 
 #pragma mark - swapping
 
-void Gem::swapTo(int x, int y, bool goBack) {
-	moveTo(x, y, kSwapTime, goBack);
+void Gem::swapTo(int x, int y, bool goBack, GemState completionState) {
+	moveTo(x, y, kSwapTime, goBack, 0, 0, completionState);
 }
 
 void Gem::fallTo(int x, int y, int blocksToWait, int rowsToWait) {
 	moveTo(x, y, kFallTime, false, blocksToWait, rowsToWait);
 }
 
-void Gem::moveTo(int x, int y, float time, bool goBack, int blocksToWait, int rowsToWait) {
+void Gem::moveTo(int x, int y, float time, bool goBack, int blocksToWait, int rowsToWait, GemState completionState) {
 	Point newLocation = convertCoordinatesToPixels(x, y);
 	Action *wait = DelayTime::create(blocksToWait * kFallTime * kColumnsFallDelay + rowsToWait * kFallTime * kRowsFallDelay);
 	Action *move = nullptr;
@@ -223,8 +223,20 @@ void Gem::moveTo(int x, int y, float time, bool goBack, int blocksToWait, int ro
 	}
     
 	Action *moveBack = MoveTo::create((this->getPosition().getDistance(newLocation) / kTileSize) * time, this->getPosition());
-	Action *endMove = CallFuncN::create( CC_CALLBACK_1(Gem::onMovementEnd, this));
-	Action *movement;
+	Action *movement = nullptr;
+    
+    Action *endMove = nullptr;
+    
+    switch(completionState) {
+        case GS_AboutToDestroyByBomb:
+            endMove = CallFunc::create(CC_CALLBACK_0(Gem::prepareToBeDestroyedByNote, this));
+            break;
+        case GS_AboutToTurnIntoBomb:
+            endMove = CallFunc::create(CC_CALLBACK_0(Gem::prepareToTurnIntoBombByNote, this));
+        case GS_Moved:
+        default:
+            endMove = CallFuncN::create(CC_CALLBACK_1(Gem::onMovementEnd, this));
+    }
 
 	if(goBack) {
 		movement = Sequence::create((FiniteTimeAction*) wait, (FiniteTimeAction*) move, (FiniteTimeAction*) moveBack, (FiniteTimeAction*) endMove, NULL);
@@ -264,6 +276,14 @@ GemType Gem::getType() {
 
 GemColour Gem::getGemColour() {
 	return colour;
+}
+
+void Gem::prepareToBeDestroyedByNote() {
+    state = GS_AboutToDestroyByBomb;
+}
+
+void Gem::prepareToTurnIntoBombByNote() {
+    state = GS_AboutToTurnIntoBomb;
 }
 
 void Gem::setGemColour(GemColour color) {

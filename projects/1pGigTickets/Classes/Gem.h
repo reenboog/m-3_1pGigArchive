@@ -16,7 +16,7 @@ public:
 	void select();
 	void deselect();
 
-	void swapTo(int x, int y, bool goBack = false);
+	void swapTo(int x, int y, bool goBack = false, GemState completionState = GS_Moved);
 	void fallTo(int x, int y, int blocksToWait = 0, int rowsToWait = 0);
 
 	void match(MatchType matchType = MT_None);
@@ -28,6 +28,9 @@ public:
 
 	GemState getState();
 	GemType getType();
+    
+    void prepareToBeDestroyedByNote();
+    void prepareToTurnIntoBombByNote();
 
     void setGemColour(GemColour color);
 	GemColour getGemColour();
@@ -38,7 +41,7 @@ public:
 	static Point convertCoordinatesToPixels(int x, int y);
 private:
     void applyBonusStyling();
-	void moveTo(int x, int y, float time, bool goBack = false, int blocksToWait = 0, int rowsToWait = 0);
+	void moveTo(int x, int y, float time, bool goBack = false, int blocksToWait = 0, int rowsToWait = 0, GemState completionState = GS_Moved);
 	void onMovementEnd(Object *sender);
 	void onDestructionEnd(Object *sender);
     void onTransformationEnd(Object *sender);

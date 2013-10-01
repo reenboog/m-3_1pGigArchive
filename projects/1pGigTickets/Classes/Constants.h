@@ -53,6 +53,8 @@ enum GemState {
 	GS_Transformed,
 	GS_Destroying,
 	GS_Destroyed,
+    GS_AboutToDestroyByBomb,
+    GS_AboutToTurnIntoBomb,
 	GS_Immovable
 };
 
@@ -87,6 +89,7 @@ enum FieldState {
 	FS_Destroying,
 	FS_Refilling,
 	FS_Shuffling,
+    FS_NoteWithNormalSwap
 };
 
 #if(kSpawnBonuses == 1)

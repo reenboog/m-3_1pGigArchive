@@ -111,7 +111,7 @@ bool GemField::init() {
         
 		const int customFieldType[kFieldHeight][kFieldWidth] = {
 			{0,0,0,0,0,0,0,0},
-			{0,0,0,0,4,0,0,0},
+			{0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0},
 			{0,0,0,0,0,0,0,0},
@@ -382,7 +382,7 @@ void GemField::destroyGem(int x, int y) {
 				if(freezeMask[y][x] == 1) {
 					freezeGem(y, x, freezeMask[y][x]-1);
 				}
-				if(gems[y][x]->getType() != GT_Colour) {
+				if(gems[y][x]->getType() != GT_Colour && gems[y][x]->getType() != GT_NoteMaker) {
                     if(gems[y][x]->getType() == GT_Explosion) {
                         gems[y][x]->transformIntoBonus((GemType)(GT_LineHor + (GemType)CCRANDOM_0_1()));
                     }
@@ -556,30 +556,69 @@ void GemField::swapGems(int fromX, int fromY, int toX, int toY) {
 	first = gems[fromY][fromX];
 	second = gems[toY][toX];
     
+    bool skipMatchLookup = false;
+    
     // check super swaps here
-    //if(first->getType() == something && second->getType() == something) {
-    //
-    //}
+    if(first->getType() == GT_NoteMaker || second->getType() == GT_NoteMaker) {
+        skipMatchLookup = true;
+        
+        Gem *noteMaker = nullptr;
+        Gem *gem = nullptr;
+        
+        if(first->getType() == GT_NoteMaker) {
+            noteMaker = first;
+            gem = second;
+        } else {
+            noteMaker = second;
+            gem = first;
+        }
+        
+        switch(gem->getType()) {
+            case GT_Colour:
+                state = FS_NoteWithNormalSwap;
+                
+                first->swapTo(toX, toY, false, GS_AboutToDestroyByBomb);
+                second->swapTo(fromX, fromY, false, GS_AboutToDestroyByBomb);
+                
+                //first->prepareToBeDestroyedByNote();
+                //second->prepareToBeDestroyedByNote();
+                
+                // todo: we don't take care about mask here
+                for(int i = 0; i < kFieldHeight; ++i) {
+                    for(int j = 0; j < kFieldWidth; ++j) {
+                        if(gem != gems[i][j] && gem->getGemColour() == gems[i][j]->getGemColour()) {
+                            gems[i][j]->prepareToBeDestroyedByNote();
+                        }
+                    }
+                }
+                
+                break;
+        }
+    } else {
+        state = FS_Moving;
+    }
     
 	swapGemsIndices(fromX, fromY, toX, toY);
+    bool isValidMove = skipMatchLookup;
     
-	bool hasMatches = hasAnyMatches();
-    
-	//Change gems' positions - if there is no match, they move forward then backward
-	first->swapTo(toX, toY, !hasMatches);
-	second->swapTo(fromX, fromY, !hasMatches);
-    
-	// If there was no match swap indices again
-	if(!hasMatches) {
-		swapGemsIndices(fromX, fromY, toX, toY);
-	}
+    if(!skipMatchLookup) {
+        bool hasMatches = hasAnyMatches();
+        isValidMove = hasMatches;
+        
+        //Change gems' positions - if there is no match, they move forward then backward
+        first->swapTo(toX, toY, !hasMatches);
+        second->swapTo(fromX, fromY, !hasMatches);
+        
+        // If there was no match swap indices again
+        if(!hasMatches) {
+            swapGemsIndices(fromX, fromY, toX, toY);
+        }
+    }
     
 	for(FieldWatcherDelegatePool::iterator it = watchers.begin(); it != watchers.end(); it++) {
-		(*it)->onMoveMade(hasMatches);
+		(*it)->onMoveMade(isValidMove);
 		(*it)->onGemsStartedSwapping();
 	}
-    
-	state = FS_Moving;
 }
 
 void GemField::swapGemsIndices(int fromX, int fromY, int toX, int toY) {
@@ -789,6 +828,21 @@ void GemField::update(float dt) {
 				state = FS_Searching;
 			}
 			break;
+        case FS_NoteWithNormalSwap:
+            if(!areGemsBeingMoved()) {
+                for(int i = 0; i < kFieldHeight; ++i) {
+                    for(int j = 0; j < kFieldWidth; ++j) {
+                        Gem *gem = gems[i][j];
+                        
+                        if(gem->getState() == GS_AboutToDestroyByBomb) {
+                            this->destroyGem(j, i);
+                        }
+                    }
+                }
+                
+                state = FS_Destroying;
+            }
+            break;
 		default:
 			break;
 	}
