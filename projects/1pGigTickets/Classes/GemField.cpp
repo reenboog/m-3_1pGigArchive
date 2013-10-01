@@ -387,41 +387,59 @@ void GemField::destroyGem(int x, int y) {
                         gems[y][x]->transformIntoBonus((GemType)(GT_LineHor + (GemType)CCRANDOM_0_1()));
                     }
                     
-                    
-                    Sprite *lightning = Sprite::createWithSpriteFrameName("lightning0.png");
-                    this->addChild(lightning, zLighting);
+                    auto applyLightningAtPosWithRotation = [=](const Point &pos, float angle) {
+                        Sprite *lightning = Sprite::createWithSpriteFrameName("lightning0.png");
+                        this->addChild(lightning, zLighting);
+                        
+                        lightning->setPosition(pos);
+                        lightning->setRotation(angle);
+                        lightning->runAction(Sequence::create(Animate::create(AnimationCache::getInstance()->animationByName("lightning")),
+                                                              CallFunc::create([=](){
+                            lightning->removeFromParent();
+                        }), NULL));
+
+                    };
 
                     Point lightningPos = Gem::convertCoordinatesToPixels(x, y);
                     
 					switch(gems[y][x]->getType()) {
-//                        case GT_Cross:
-//                            gems[y][x]->destroy();
-//                            destroyLine(x, 0, x, kFieldHeight - 1);
-//                            destroyLine(0, y, kFieldWidth - 1, y);
-//                            break;
+                        case GT_Cross: {
+                            gems[y][x]->destroy();
+                            destroyLine(x, 0, x, kFieldHeight - 1);
+                            destroyLine(0, y, kFieldWidth - 1, y);
+                            
+                            Point firstLightningPos = lightningPos;
+                            firstLightningPos.x = (kFieldWidth * kTileSize) / 2.0f;
+
+                            applyLightningAtPosWithRotation(firstLightningPos, 90);
+                            
+                            Point secondLightningPos = lightningPos;
+                            secondLightningPos.y = (kFieldHeight * kTileSize) / 2.0f;
+                            
+                            applyLightningAtPosWithRotation(secondLightningPos, 0);
+                        } break;
                         case GT_LineHor :
                             gems[y][x]->destroy();
                             destroyLine(0, y, kFieldWidth - 1, y);
                             
                             lightningPos.x = (kFieldWidth * kTileSize) / 2.0f;
-                            lightning->setRotation(90);
+                            //lightning->setRotation(90);
+                            
+                            applyLightningAtPosWithRotation(lightningPos, 90);
                             break;
                         case GT_LineVer :
                             gems[y][x]->destroy();
                             destroyLine(x, 0, x, kFieldHeight - 1);
                             
                             lightningPos.y = (kFieldHeight * kTileSize) / 2.0f;
+                            
+                            applyLightningAtPosWithRotation(lightningPos, 0);
                             break;
                         default:
                             gems[y][x]->destroy();
                             break;
 					}
                     
-                    lightning->setPosition(lightningPos);
-                    lightning->runAction(Sequence::create(Animate::create(AnimationCache::getInstance()->animationByName("lightning")),
-                                                          CallFunc::create([=](){
-                                                                lightning->removeFromParent();
-                                                          }), NULL));
 				}
                 
                 int score = this->scoreForGem(y, x);
@@ -575,10 +593,10 @@ void GemField::swapGems(int fromX, int fromY, int toX, int toY) {
         
         switch(gem->getType()) {
             case GT_Colour:
-                state = FS_NoteWithNormalSwap;
+                state = FS_SwappingNoteWithNormalIcon;
                 
-                first->swapTo(toX, toY, false, GS_AboutToDestroyByBomb);
-                second->swapTo(fromX, fromY, false, GS_AboutToDestroyByBomb);
+                first->swapTo(toX, toY, false, GS_AboutToDestroyByNote);
+                second->swapTo(fromX, fromY, false, GS_AboutToDestroyByNote);
                 
                 //first->prepareToBeDestroyedByNote();
                 //second->prepareToBeDestroyedByNote();
@@ -594,6 +612,12 @@ void GemField::swapGems(int fromX, int fromY, int toX, int toY) {
                 
                 break;
         }
+    } else if(first->getType() == GT_Explosion && second->getType() == GT_Explosion) {
+        skipMatchLookup = true;
+        state = FS_SwappingTwoFourInRowIcons;
+        
+        first->swapTo(toX, toY, false, GS_AboutToExplodeWithCross);
+        second->swapTo(fromX, fromY, false, GS_AboutToExplodeWithCross);
     } else {
         state = FS_Moving;
     }
@@ -828,13 +852,13 @@ void GemField::update(float dt) {
 				state = FS_Searching;
 			}
 			break;
-        case FS_NoteWithNormalSwap:
+        case FS_SwappingNoteWithNormalIcon:
             if(!areGemsBeingMoved()) {
                 for(int i = 0; i < kFieldHeight; ++i) {
                     for(int j = 0; j < kFieldWidth; ++j) {
                         Gem *gem = gems[i][j];
                         
-                        if(gem->getState() == GS_AboutToDestroyByBomb) {
+                        if(gem->getState() == GS_AboutToDestroyByNote) {
                             this->destroyGem(j, i);
                         }
                     }
@@ -843,6 +867,21 @@ void GemField::update(float dt) {
                 state = FS_Destroying;
             }
             break;
+        case FS_SwappingTwoFourInRowIcons:
+            if(!areGemsBeingMoved()) {
+                for(int i = 0; i < kFieldHeight; ++i) {
+                    for(int j = 0; j < kFieldWidth; ++j) {
+                        Gem *gem = gems[i][j];
+                        
+                        if(gem->getState() == GS_AboutToExplodeWithCross) {
+                            gem->setType(GT_Cross);
+                            this->destroyGem(j, i);
+                        }
+                    }
+                }
+                
+                state = FS_Destroying;
+            }
 		default:
 			break;
 	}

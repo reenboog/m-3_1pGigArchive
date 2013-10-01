@@ -28,9 +28,11 @@ public:
 
 	GemState getState();
 	GemType getType();
+    void setType(GemType type);
     
     void prepareToBeDestroyedByNote();
     void prepareToTurnIntoBombByNote();
+    void prepareToTurnIntoCrossExplosion();
 
     void setGemColour(GemColour color);
 	GemColour getGemColour();

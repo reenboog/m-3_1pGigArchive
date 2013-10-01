@@ -228,11 +228,14 @@ void Gem::moveTo(int x, int y, float time, bool goBack, int blocksToWait, int ro
     Action *endMove = nullptr;
     
     switch(completionState) {
-        case GS_AboutToDestroyByBomb:
+        case GS_AboutToDestroyByNote:
             endMove = CallFunc::create(CC_CALLBACK_0(Gem::prepareToBeDestroyedByNote, this));
             break;
         case GS_AboutToTurnIntoBomb:
             endMove = CallFunc::create(CC_CALLBACK_0(Gem::prepareToTurnIntoBombByNote, this));
+        case GS_AboutToExplodeWithCross:
+            endMove = CallFunc::create(CC_CALLBACK_0(Gem::prepareToTurnIntoCrossExplosion, this));
+            break;
         case GS_Moved:
         default:
             endMove = CallFuncN::create(CC_CALLBACK_1(Gem::onMovementEnd, this));
@@ -274,16 +277,24 @@ GemType Gem::getType() {
 	return type;
 }
 
+void Gem::setType(GemType type) {
+    this->type = type;
+}
+
 GemColour Gem::getGemColour() {
 	return colour;
 }
 
 void Gem::prepareToBeDestroyedByNote() {
-    state = GS_AboutToDestroyByBomb;
+    state = GS_AboutToDestroyByNote;
 }
 
 void Gem::prepareToTurnIntoBombByNote() {
     state = GS_AboutToTurnIntoBomb;
+}
+
+void Gem::prepareToTurnIntoCrossExplosion() {
+    state = GS_AboutToExplodeWithCross;
 }
 
 void Gem::setGemColour(GemColour color) {
