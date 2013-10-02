@@ -261,12 +261,6 @@ void GemField::resolveMatch(const Match &match) {
 	int y = match.fromY;
     
 	// Bonus types for each kind of match are defined at the bottom of Config.h
-    
-    CCLOG("bonus added: %i", (int)bonusWasAdded);
-    CCLOG("stepX: %i", stepX);
-    CCLOG("stepY: %i", stepY);
-    CCLOG("length: %i", match.length);
-    
 	while(y <= match.toY && x <= match.toX) {
 		// If the gem is not already matched or transforming into a bonus
 		if(gems[y][x]->getState() != GS_Matched && gems[y][x]->getState() != GS_Transforming) {
@@ -876,16 +870,62 @@ void GemField::update(float dt) {
 			break;
         case FS_SwappingNoteWithNormalIcon:
             if(!areGemsBeingMoved()) {
+                
+                // get a note first
+                Gem *noteMaker = nullptr;
+                
+                for(int i = 0; i < kFieldHeight; ++i) {
+                    for(int j = 0; j < kFieldWidth; ++j) {
+                        if(noteMaker == nullptr && gems[i][j]->getState() == GS_AboutToDestroyByNote && gems[i][j]->getType() == GT_NoteMaker) {
+                            noteMaker = gems[i][j];
+                            break;
+                        }
+                    }
+                }
+                
+                auto applyLightning = [this](const Point &startPos, const Point &endPos, float delay) {
+                    Sprite *lightning = Sprite::createWithSpriteFrameName("lightning0.png");
+                    this->addChild(lightning, zGem - 1);
+                    
+                    Point yAxe = Point(0, 1);
+                    Point delta = endPos - startPos;
+                    float angle = yAxe.getAngle(delta);
+                    
+                    float scaleY = delta.getLength() / lightning->getContentSize().height;
+                    
+                    lightning->setAnchorPoint({0.5, 0.0});
+                    lightning->setPosition(startPos);
+                    lightning->setOpacity(150);
+                    lightning->setVisible(false);
+                    lightning->setScaleY(scaleY);
+                    lightning->setRotation(CC_RADIANS_TO_DEGREES(-angle));
+                    lightning->runAction(Sequence::create(DelayTime::create(delay),
+                                                          Show::create(),
+                                                          Animate::create(AnimationCache::getInstance()->animationByName("lightningSmall")),
+                                                          CallFunc::create([=](){
+                        lightning->removeFromParent();
+                    }), NULL));
+                };
+                
                 for(int i = 0; i < kFieldHeight; ++i) {
                     for(int j = 0; j < kFieldWidth; ++j) {
                         Gem *gem = gems[i][j];
                         
                         if(gem->getState() == GS_AboutToDestroyByNote) {
-                            this->destroyGem(j, i);
+                            
+                            float delay = i * 0.02 + j * 0.03;
+                            this->destroyGem(j, i, delay);
+                            // apply lightning
+                            Point endPos = Gem::convertCoordinatesToPixels(j, i);
+                            applyLightning(noteMaker->getPosition(), endPos, delay);
                         }
                     }
                 }
                 
+                state = FS_DestroyingNormalIconsAfterSwipe;
+            } break;
+        case FS_DestroyingNormalIconsAfterSwipe:
+            if(!areGemsBeingMoved()) {
                 state = FS_Destroying;
             } break;
         case FS_SwappingTwoFourInRowIcons:

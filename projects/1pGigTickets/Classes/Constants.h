@@ -93,6 +93,7 @@ enum FieldState {
 	FS_Refilling,
 	FS_Shuffling,
     FS_SwappingNoteWithNormalIcon,
+    FS_DestroyingNormalIconsAfterSwipe,
     FS_SwappingTwoFourInRowIcons,
     FS_SwappingNoteWithFourInRowIcon,
     FS_TurningGemsToFourInRowIcons,

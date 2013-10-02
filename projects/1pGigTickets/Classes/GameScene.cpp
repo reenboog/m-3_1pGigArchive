@@ -52,6 +52,7 @@ bool GameScene::init() {
     Shared::loadAnimation("animations.plist", "gemDeath");
     Shared::loadAnimation("animations.plist", "gemBlast");
     Shared::loadAnimation("animations.plist", "lightning");
+    Shared::loadAnimation("animations.plist", "lightningSmall");
     //
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
