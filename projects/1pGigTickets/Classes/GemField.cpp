@@ -282,16 +282,14 @@ void GemField::resolveMatch(const Match &match) {
 						// Transform into bonus for vertical >3 in a row
 						if(match.length == 4) {
 							gems[y][x]->transformIntoBonus(kVerticalMatchFourBonus);
-						}
-						if(match.length >= 5) {
+						} else if(match.length >= 5) {
 							gems[y][x]->transformIntoBonus(kVerticalMatchFiveBonus);
 						}
 					} else {
 						// Transform into bonus for horizontal >3 in a row
 						if(match.length == 4) {
 							gems[y][x]->transformIntoBonus(kHorizontalMatchFourBonus);
-						}
-						if(match.length >= 5) {
+						} else if(match.length >= 5) {
                             gems[y][x]->transformIntoBonus(kHorizontalMatchFiveBonus);
 						}
 					}
@@ -727,22 +725,22 @@ void GemField::swipeAction(const Point &startCoordinates, int direction) {
 	if(fromX >=0 && fromX < kFieldWidth && fromY >= 0 && fromY < kFieldHeight) {
 		switch (direction)
 		{
-			case D_Up :
+			case D_Up:
 				if(fromY > 0) {
 					toY -= 1;
 				}
 				break;
-			case D_Down :
+			case D_Down:
 				if(fromY < kFieldHeight - 1) {
 					toY += 1;
 				}
 				break;
-			case D_Left :
+			case D_Left:
 				if(fromX > 0) {
 					toX -= 1;
 				}
 				break;
-			case D_Right :
+			case D_Right:
 				if(fromX < kFieldWidth - 1) {
 					toX += 1;
 				}
