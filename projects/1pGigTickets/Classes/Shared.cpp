@@ -21,11 +21,18 @@ Animation* Shared::loadAnimation(string file, string name) {
     float delay = animationDict->valueForKey("delay")->floatValue();
     animation->setDelayPerUnit(delay);
     
+    string frameNameStr = name;
+    
+    const String *baseFrameName = animationDict->valueForKey("baseFrameName");
+    if(baseFrameName->compare("")) {
+        frameNameStr = baseFrameName->getCString();
+    }
+    
     const String *framesStr = animationDict->valueForKey("frames");
     Array *indices = framesStr->clone()->componentsSeparatedByString(",");
     
     for(int i = 0; i < indices->count(); ++i) {
-        String *frameName = String::create(name);
+        String *frameName = String::create(frameNameStr);
         String *index = (String *)indices->objectAtIndex(i);
         frameName->appendWithFormat("%s.png", index->getCString());
         
