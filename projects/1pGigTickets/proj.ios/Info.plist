@@ -21,6 +21,8 @@
 	</array>
 	<key>CFBundleIdentifier</key>
 	<string>com.deepsine.nag1pgig</string>
+	<key>bundleIdCopy</key>
+	<string>com.deepsine.nag1pgig</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>

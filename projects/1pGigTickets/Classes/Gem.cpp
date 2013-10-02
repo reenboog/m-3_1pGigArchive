@@ -90,7 +90,11 @@ void Gem::reset(int x, int y, GemColour colour, GemType type) {
 
 #pragma mark - bonuses
 
-void Gem::transformIntoBonus(GemType type) {
+void Gem::transformIntoBonus(GemType type, float delay, GemState completionState) {
+    if(state == GS_Transforming) {
+        return;
+    }
+    
 	if(type != GT_Colour) {
 		this->type = type;
 		this->state = GS_Transforming;
@@ -124,11 +128,48 @@ void Gem::transformIntoBonus(GemType type) {
 				break;
 		}
         
+        auto applyAnimation = [&]() {
+            string animationName = "";
+            
+            if(this->type != GT_NoteMaker) {
+                switch(colour) {
+                    case GC_Guitar: animationName = "guitar"; break;
+                    case GC_Keyboard: animationName = "keyboard"; break;
+                    case GC_Microphone: animationName = "mic"; break;
+                    case GC_Plectrum: animationName = "plectrum"; break;
+                    case GC_Question: animationName = "mark"; break;
+                    case GC_Saxophone: animationName = "sax"; break;
+                        
+                    default: CCLOG("default gem color in reset!");
+                }
+            } else {
+                animationName = "note";
+            }
+            
+            Animate *action = Animate::create(AnimationCache::getInstance()->animationByName(animationName.c_str()));
+            runAction(RepeatForever::create(action));
+        };
+        
+        //Action *endTransformation = CallFuncN::create(CC_CALLBACK_1(Gem::onTransformationEnd, this));
+        Action *endTransformation = nullptr;
+        
+        switch(completionState) {
+            case GS_AboutToExplodeByNote:
+                endTransformation = CallFunc::create(CC_CALLBACK_0(Gem::prepareToExplodeByNote, this));
+                break;
+            case GS_Transformed:
+            default:
+                endTransformation = CallFuncN::create(CC_CALLBACK_1(Gem::onTransformationEnd, this));
+                break;
+        }
+        
 		Action *shrink = ScaleTo::create(kTransformationTime / 3.f, 1);
-		Action *endTransformation = CallFuncN::create(CC_CALLBACK_1(Gem::onTransformationEnd, this));
-		Action *destruction = Sequence::create(//(FiniteTimeAction*) enlarge,
+        Action *animation = CallFunc::create(applyAnimation);
+		Action *destruction = Sequence::create(DelayTime::create(delay),
+                                               //(FiniteTimeAction*) enlarge,
                                                //(FiniteTimeAction*) restyle,
                                                //(FiniteTimeAction*) shrink,
+                                               (FiniteTimeAction*) animation,
                                                (FiniteTimeAction*) endTransformation,
                                                NULL);
         runAction(destruction);
@@ -138,28 +179,7 @@ void Gem::transformIntoBonus(GemType type) {
 }
 
 void Gem::onTransformationEnd(Object *sender) {
-	state = GS_Transformed;
-    
-    string animationName = "";
-    
-    if(type != GT_NoteMaker) {
-        switch(colour) {
-            case GC_Guitar: animationName = "guitar"; break;
-            case GC_Keyboard: animationName = "keyboard"; break;
-            case GC_Microphone: animationName = "mic"; break;
-            case GC_Plectrum: animationName = "plectrum"; break;
-            case GC_Question: animationName = "mark"; break;
-            case GC_Saxophone: animationName = "sax"; break;
-            //case GC_Note: animationName = "note"; break;
-                
-            default: CCLOG("default gem color in reset!");
-        }
-    } else {
-        animationName = "note";
-    }
-    
-    Animate *action = Animate::create(AnimationCache::getInstance()->animationByName(animationName.c_str()));
-    runAction(RepeatForever::create(action));
+	state = GS_Transformed;    
 }
 
 void Gem::applyBonusStyling() {
@@ -203,8 +223,14 @@ void Gem::fallTo(int x, int y, int blocksToWait, int rowsToWait) {
 }
 
 void Gem::moveTo(int x, int y, float time, bool goBack, int blocksToWait, int rowsToWait, GemState completionState) {
+    
+    if(state == GS_Moving) {
+        return;
+    }
+    
 	Point newLocation = convertCoordinatesToPixels(x, y);
-	Action *wait = DelayTime::create(blocksToWait * kFallTime * kColumnsFallDelay + rowsToWait * kFallTime * kRowsFallDelay);
+	
+    Action *wait = DelayTime::create(blocksToWait * kFallTime * kColumnsFallDelay + rowsToWait * kFallTime * kRowsFallDelay);
 	Action *move = nullptr;
 
     if(blocksToWait >= 1 || (this->getPosition().getDistance(newLocation) / kTileSize) > 1) {
@@ -233,6 +259,7 @@ void Gem::moveTo(int x, int y, float time, bool goBack, int blocksToWait, int ro
             break;
         case GS_AboutToTurnIntoBomb:
             endMove = CallFunc::create(CC_CALLBACK_0(Gem::prepareToTurnIntoBombByNote, this));
+            break;
         case GS_AboutToExplodeWithCross:
             endMove = CallFunc::create(CC_CALLBACK_0(Gem::prepareToTurnIntoCrossExplosion, this));
             break;
@@ -273,6 +300,10 @@ GemState Gem::getState() {
 	return state;
 }
 
+void Gem::setState(GemState state) {
+    this->state = state;
+}
+
 GemType Gem::getType() {
 	return type;
 }
@@ -285,6 +316,8 @@ GemColour Gem::getGemColour() {
 	return colour;
 }
 
+#pragma mark - bonus helpers
+
 void Gem::prepareToBeDestroyedByNote() {
     state = GS_AboutToDestroyByNote;
 }
@@ -295,6 +328,10 @@ void Gem::prepareToTurnIntoBombByNote() {
 
 void Gem::prepareToTurnIntoCrossExplosion() {
     state = GS_AboutToExplodeWithCross;
+}
+
+void Gem::prepareToExplodeByNote() {
+    state = GS_AboutToExplodeByNote;
 }
 
 void Gem::setGemColour(GemColour color) {
@@ -332,12 +369,14 @@ void Gem::onDestructionEnd(Object *sender) {
 	state = GS_Destroyed;
 }
 
-void Gem::destroy() {
+void Gem::destroy(float delay) {
 	if(state != GS_Destroying) {
+        Action *wait = DelayTime::create(delay);
 		Action *enlarge = ScaleTo::create(kDestructionTime / 3.f, 1.2f);
 		Action *shrink = ScaleTo::create(kDestructionTime / 3.f * 2.f, 0);
 		Action *endDestruction = CallFuncN::create(CC_CALLBACK_1(Gem::onDestructionEnd, this));
-		Action *destruction = Sequence::create((FiniteTimeAction*) enlarge,
+		Action *destruction = Sequence::create((FiniteTimeAction*) wait,
+                                               (FiniteTimeAction*) enlarge,
 											   (FiniteTimeAction*) shrink,
 											   (FiniteTimeAction*) endDestruction, NULL);
         

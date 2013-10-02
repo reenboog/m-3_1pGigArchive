@@ -87,11 +87,6 @@ bool GemField::init() {
 				this->addChild(gems[y][x]);
                 gems[y][x]->autorelease();
 			} else {
-//				// Fill holes with tiles
-//				Sprite *tile = Sprite::create("tile.png");
-//				tile->setZOrder(zTile);
-//				tile->setPosition(Gem::convertCoordinatesToPixels(x, y));
-//				this->addChild(tile);
 			}
 		}
 	}
@@ -99,8 +94,8 @@ bool GemField::init() {
     state = FS_Ready;
    	if(kPreloadField) {
 		const int customField[kFieldHeight][kFieldWidth] = {
-			{2,3,4,2,1,4,2,3},
-			{3,4,2,3,5,2,3,2},
+			{2,3,3,2,1,4,2,3},
+			{3,4,3,3,5,2,3,2},
 			{4,1,1,4,1,3,2,3},
 			{1,5,3,1,5,2,3,4},
 			{3,4,3,3,5,3,4,2},
@@ -187,7 +182,8 @@ MatchList GemField::findMatchesInLine(int fromX, int fromY, int toX, int toY) {
 	y += stepY;
     
 	while(x <= toX && y <= toY) {
-		while((x <= toX && y <= toY) && fieldMask[y][x] == 1 && freezeMask[y][x] <= 1 && (gems[y][x]->getGemColour() == currentValue) && currentValue != GC_Note) {
+		while((x <= toX && y <= toY) && fieldMask[y][x] == 1 && freezeMask[y][x] <= 1 && (gems[y][x]->getGemColour() == currentValue) &&
+              !(gems[y][x]->getType() == GT_NoteMaker && gems[y][x]->getState() != GS_Transformed)) {
 
 			x += stepX;
 			y += stepY;
@@ -265,6 +261,11 @@ void GemField::resolveMatch(const Match &match) {
 	int y = match.fromY;
     
 	// Bonus types for each kind of match are defined at the bottom of Config.h
+    
+    CCLOG("bonus added: %i", (int)bonusWasAdded);
+    CCLOG("stepX: %i", stepX);
+    CCLOG("stepY: %i", stepY);
+    CCLOG("length: %i", match.length);
     
 	while(y <= match.toY && x <= match.toX) {
 		// If the gem is not already matched or transforming into a bonus
@@ -350,7 +351,7 @@ void GemField::destroyMatchedGems() {
 }
 
 // Destroys a line of gems (should work for diagonal ones as well)
-void GemField::destroyLine(int fromX, int fromY, int toX, int toY, bool destroyTransformed) {
+void GemField::destroyLine(int fromX, int fromY, int toX, int toY, bool destroyTransformed, float delay) {
 	int stepX = 1;
 	int stepY = 1;
 	if(fromX == toX) {
@@ -359,41 +360,45 @@ void GemField::destroyLine(int fromX, int fromY, int toX, int toY, bool destroyT
 	if(fromY == toY) {
 		stepY = 0;
 	}
-	//CCLOG("Destroy line %i, %i - %i", fromX, fromY, toY);
-	int y = fromY;
+	
+    int y = fromY;
 	int x = fromX;
 	while(y <= toY && x <= toX) {
 		if(!destroyTransformed && gems[y][x]->getState() == GS_Transformed) {
 			CCLOG("Fledgling @ %i, %i", x, y);
 		} else {
-			destroyGem(x, y);
+			destroyGem(x, y, delay);
 		}
 		y += stepY;
 		x += stepX;
 	}
 }
 
-void GemField::destroyGem(int x, int y) {
+void GemField::destroyGem(int x, int y, float delay) {
 	if(fieldMask[y][x] == 1) {
-		if(gems[y][x]->getState() != GS_Destroying) {
+		if(gems[y][x]->getState() != GS_Destroying && gems[y][x]->getState() != GS_AboutToExplodeByNote) {
 			if(freezeMask[y][x] > 1) {
 				freezeGem(y, x, freezeMask[y][x]-1);
 			} else {
 				if(freezeMask[y][x] == 1) {
-					freezeGem(y, x, freezeMask[y][x]-1);
+					freezeGem(y, x, freezeMask[y][x] - 1);
 				}
 				if(gems[y][x]->getType() != GT_Colour && gems[y][x]->getType() != GT_NoteMaker) {
                     if(gems[y][x]->getType() == GT_Explosion) {
-                        gems[y][x]->transformIntoBonus((GemType)(GT_LineHor + (GemType)CCRANDOM_0_1()));
+                        gems[y][x]->setType((GemType)(GT_LineHor + (GemType)(rand() % 2)));
                     }
                     
-                    auto applyLightningAtPosWithRotation = [=](const Point &pos, float angle) {
+                    auto applyLightningAtPosWithRotation = [=](const Point &pos, float angle, float delay) {
                         Sprite *lightning = Sprite::createWithSpriteFrameName("lightning0.png");
+                        lightning->setScaleX(1.5);
                         this->addChild(lightning, zLighting);
                         
                         lightning->setPosition(pos);
                         lightning->setRotation(angle);
-                        lightning->runAction(Sequence::create(Animate::create(AnimationCache::getInstance()->animationByName("lightning")),
+                        lightning->setVisible(false),
+                        lightning->runAction(Sequence::create(DelayTime::create(delay),
+                                                              Show::create(),
+                                                              Animate::create(AnimationCache::getInstance()->animationByName("lightning")),
                                                               CallFunc::create([=](){
                             lightning->removeFromParent();
                         }), NULL));
@@ -401,45 +406,44 @@ void GemField::destroyGem(int x, int y) {
                     };
 
                     Point lightningPos = Gem::convertCoordinatesToPixels(x, y);
-                    
+                                        
 					switch(gems[y][x]->getType()) {
                         case GT_Cross: {
-                            gems[y][x]->destroy();
-                            destroyLine(x, 0, x, kFieldHeight - 1);
-                            destroyLine(0, y, kFieldWidth - 1, y);
+                            gems[y][x]->destroy(delay);
+
+                            destroyLine(x, 0, x, kFieldHeight - 1, true, delay);
+                            destroyLine(0, y, kFieldWidth - 1, y, true, delay);
                             
                             Point firstLightningPos = lightningPos;
                             firstLightningPos.x = (kFieldWidth * kTileSize) / 2.0f;
 
-                            applyLightningAtPosWithRotation(firstLightningPos, 90);
+                            applyLightningAtPosWithRotation(firstLightningPos, 90, delay);
                             
                             Point secondLightningPos = lightningPos;
                             secondLightningPos.y = (kFieldHeight * kTileSize) / 2.0f;
                             
-                            applyLightningAtPosWithRotation(secondLightningPos, 0);
+                            applyLightningAtPosWithRotation(secondLightningPos, 0, delay);
                         } break;
-                        case GT_LineHor :
-                            gems[y][x]->destroy();
-                            destroyLine(0, y, kFieldWidth - 1, y);
+                        case GT_LineHor:
+                            gems[y][x]->destroy(delay);
+                            destroyLine(0, y, kFieldWidth - 1, y, true, delay);
                             
                             lightningPos.x = (kFieldWidth * kTileSize) / 2.0f;
-                            //lightning->setRotation(90);
                             
-                            applyLightningAtPosWithRotation(lightningPos, 90);
+                            applyLightningAtPosWithRotation(lightningPos, 90, delay);
                             break;
-                        case GT_LineVer :
-                            gems[y][x]->destroy();
-                            destroyLine(x, 0, x, kFieldHeight - 1);
+                        case GT_LineVer:
+                            gems[y][x]->destroy(delay);
+                            destroyLine(x, 0, x, kFieldHeight - 1, true, delay);
                             
                             lightningPos.y = (kFieldHeight * kTileSize) / 2.0f;
                             
-                            applyLightningAtPosWithRotation(lightningPos, 0);
+                            applyLightningAtPosWithRotation(lightningPos, 0, delay);
                             break;
                         default:
-                            gems[y][x]->destroy();
+                            gems[y][x]->destroy(delay);
                             break;
 					}
-                    
 				}
                 
                 int score = this->scoreForGem(y, x);
@@ -449,7 +453,7 @@ void GemField::destroyGem(int x, int y) {
 						(*it)->onGemDestroyed(gems[y][x]->getGemColour(), x, y, score);
 					}
 				}
-				gems[y][x]->destroy();
+				gems[y][x]->destroy(delay);
 			}
 		}
 	}
@@ -586,30 +590,50 @@ void GemField::swapGems(int fromX, int fromY, int toX, int toY) {
         if(first->getType() == GT_NoteMaker) {
             noteMaker = first;
             gem = second;
+            
+            int tx = fromX;
+            fromX = toX;
+            toX = tx;
+            
+            int ty = fromY;
+            fromY = toY;
+            toY = ty;
+
         } else {
             noteMaker = second;
             gem = first;
+            
         }
         
         switch(gem->getType()) {
             case GT_Colour:
                 state = FS_SwappingNoteWithNormalIcon;
                 
-                first->swapTo(toX, toY, false, GS_AboutToDestroyByNote);
-                second->swapTo(fromX, fromY, false, GS_AboutToDestroyByNote);
-                
-                //first->prepareToBeDestroyedByNote();
-                //second->prepareToBeDestroyedByNote();
-                
+                gem->swapTo(toX, toY, false, GS_AboutToDestroyByNote);
+                noteMaker->swapTo(fromX, fromY, false, GS_AboutToDestroyByNote);
+                                
                 // todo: we don't take care about mask here
                 for(int i = 0; i < kFieldHeight; ++i) {
                     for(int j = 0; j < kFieldWidth; ++j) {
-                        if(gem != gems[i][j] && gem->getGemColour() == gems[i][j]->getGemColour()) {
+                        if(gem != gems[i][j] && noteMaker != gems[i][j] && gems[i][j]->getType() == GT_Colour && gem->getGemColour() == gems[i][j]->getGemColour()) {
                             gems[i][j]->prepareToBeDestroyedByNote();
                         }
                     }
                 }
+                break;
+            case GT_Explosion:
+                state = FS_SwappingNoteWithFourInRowIcon;
                 
+                gem->swapTo(toX, toY, false, GS_AboutToTurnIntoBomb);
+                noteMaker->swapTo(fromX, fromY, false, GS_AboutToDestroyByNote);
+                
+                for(int i = 0; i < kFieldHeight; ++i) {
+                    for(int j = 0; j < kFieldWidth; ++j) {
+                        if(gem != gems[i][j] && noteMaker != gems[i][j] && gems[i][j]->getType() == GT_Colour && gem->getGemColour() == gems[i][j]->getGemColour()) {
+                            gems[i][j]->prepareToTurnIntoBombByNote();
+                        }
+                    }
+                }
                 break;
         }
     } else if(first->getType() == GT_Explosion && second->getType() == GT_Explosion) {
@@ -865,8 +889,7 @@ void GemField::update(float dt) {
                 }
                 
                 state = FS_Destroying;
-            }
-            break;
+            } break;
         case FS_SwappingTwoFourInRowIcons:
             if(!areGemsBeingMoved()) {
                 for(int i = 0; i < kFieldHeight; ++i) {
@@ -881,7 +904,45 @@ void GemField::update(float dt) {
                 }
                 
                 state = FS_Destroying;
+            } break;
+        case FS_SwappingNoteWithFourInRowIcon:
+            if(!areGemsBeingMoved()) {
+                for(int i = 0; i < kFieldHeight; ++i) {
+                    for(int j = 0; j < kFieldWidth; ++j) {
+                        Gem *gem = gems[i][j];
+                        
+                        if(gem->getState() == GS_AboutToTurnIntoBomb) {
+                            gem->transformIntoBonus(GT_Explosion, i * 0.06 + j * 0.04, GS_AboutToExplodeByNote);
+                            // apply state here
+                        }
+                    }
+                }
+                
+                state = FS_TurningGemsToFourInRowIcons;
+            } break;
+        case FS_TurningGemsToFourInRowIcons:
+            if(!areGemsBeingMoved()) {
+                for(int i = 0; i < kFieldHeight; ++i) {
+                    for(int j = 0; j < kFieldWidth; ++j) {
+                        Gem *gem = gems[i][j];
+                        
+                        if(gem->getState() == GS_AboutToExplodeByNote || gem->getState() == GS_AboutToDestroyByNote) {
+                            //gem->transformIntoBonus(GT_Explosion, i * 0.06 + j * 0.04);
+                            gem->setState(GS_ExplodingByNote);
+                            this->destroyGem(j, i, i * 0.06 + j * 0.04);
+                        }
+                    }
+                }
+                
+                state = FS_DestroyingFourInRowIcons;
+                
+                // destroy with delay
+            } break;
+        case FS_DestroyingFourInRowIcons:
+            if(!areGemsBeingMoved()) {                
+                state = FS_Destroying;
             }
+            break;
 		default:
 			break;
 	}
@@ -1109,8 +1170,8 @@ MoveList GemField::getMovesForLine(int fromX, int fromY, int toX, int toY) {
     
     
 	while(x <= toX + 1 && y <= toY + 1) {
-//		while((x <= toX && y <= toY) && fieldMask[y][x] == 1 && freezeMask[y][x] <= 1 && (gems[y][x]->getGemColour() == currentValue || (gems[y][x]->getGemColour() == GC_Note  && chainLength >= 2) || currentValue == GC_Note)) {
-		while((x <= toX && y <= toY) && fieldMask[y][x] == 1 && freezeMask[y][x] <= 1 && (gems[y][x]->getGemColour() == currentValue && currentValue != GC_Note)) {
+        while((x <= toX && y <= toY) && fieldMask[y][x] == 1 && freezeMask[y][x] <= 1 && (gems[y][x]->getGemColour() == currentValue) &&
+                !(gems[y][x]->getType() == GT_NoteMaker && gems[y][x]->getState() != GS_Transformed)) {
             
 			x += stepX;
 			y += stepY;

@@ -54,6 +54,8 @@ enum GemState {
 	GS_Destroying,
 	GS_Destroyed,
     GS_AboutToDestroyByNote,
+    GS_AboutToExplodeByNote,
+    GS_ExplodingByNote,
     GS_AboutToTurnIntoBomb,
     GS_AboutToExplodeWithCross,
 	GS_Immovable
@@ -93,6 +95,7 @@ enum FieldState {
     FS_SwappingNoteWithNormalIcon,
     FS_SwappingTwoFourInRowIcons,
     FS_SwappingNoteWithFourInRowIcon,
+    FS_TurningGemsToFourInRowIcons,
     FS_DestroyingFourInRowIcons,
 };
 

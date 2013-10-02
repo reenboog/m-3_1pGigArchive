@@ -20,18 +20,20 @@ public:
 	void fallTo(int x, int y, int blocksToWait = 0, int rowsToWait = 0);
 
 	void match(MatchType matchType = MT_None);
-	void destroy();
-    void transformIntoBonus(GemType type);
+	void destroy(float delay = 0.0f);
+    void transformIntoBonus(GemType type, float delay = 0.0f, GemState completionState = GS_Transformed);
 	void remove();
 
 	void reset(int x, int y, GemColour = GC_Random, GemType = GT_Colour);
 
 	GemState getState();
+    void setState(GemState state);
 	GemType getType();
     void setType(GemType type);
     
     void prepareToBeDestroyedByNote();
     void prepareToTurnIntoBombByNote();
+    void prepareToExplodeByNote();
     void prepareToTurnIntoCrossExplosion();
 
     void setGemColour(GemColour color);

@@ -104,8 +104,8 @@ private:
 	void removeGem(int x, int y);
     
 	void destroyMatchedGems();
-	void destroyLine(int fromX, int fromY, int toX, int toY, bool destroyTransformed = true);
-	void destroyGem(int x, int y);
+	void destroyLine(int fromX, int fromY, int toX, int toY, bool destroyTransformed = true, float delay = 0.0);
+	void destroyGem(int x, int y, float delay = 0.0f);
     
 	bool hasAnyMatches();
     
