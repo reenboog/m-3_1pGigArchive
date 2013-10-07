@@ -368,14 +368,17 @@ void GemField::destroyLine(int fromX, int fromY, int toX, int toY, bool destroyT
 
 void GemField::destroyGem(int x, int y, float delay) {
 	if(fieldMask[y][x] == 1) {
-		if(gems[y][x]->getState() != GS_Destroying && gems[y][x]->getState() != GS_AboutToExplodeByNote) {
+        GemState gemState = gems[y][x]->getState();
+        
+		if(gemState != GS_Destroying && gemState != GS_AboutToExplodeByNote) {
 			if(freezeMask[y][x] > 1) {
 				freezeGem(y, x, freezeMask[y][x]-1);
 			} else {
 				if(freezeMask[y][x] == 1) {
 					freezeGem(y, x, freezeMask[y][x] - 1);
 				}
-				if(gems[y][x]->getType() != GT_Colour && gems[y][x]->getType() != GT_NoteMaker) {
+				
+                if(gems[y][x]->getType() != GT_Colour && gems[y][x]->getType() != GT_NoteMaker) {
                     if(gems[y][x]->getType() == GT_Explosion) {
                         gems[y][x]->setType((GemType)(GT_LineHor + (GemType)(rand() % 2)));
                     }
@@ -438,9 +441,9 @@ void GemField::destroyGem(int x, int y, float delay) {
 					}
 				}
                 
-                int score = this->scoreForGem(y, x);
-                
-				if(gems[y][x]->getState() != GS_Matched) {
+                int score = this->scoreForGem(x, y);
+                // todo: fix this in gemLand
+				if(gemState != GS_Matched) {
 					for(FieldWatcherDelegatePool::iterator it = watchers.begin(); it != watchers.end(); it++) {
 						(*it)->onGemDestroyed(gems[y][x]->getGemColour(), x, y, score);
 					}
@@ -621,7 +624,8 @@ void GemField::swapGems(int fromX, int fromY, int toX, int toY) {
                 
                 for(int i = 0; i < kFieldHeight; ++i) {
                     for(int j = 0; j < kFieldWidth; ++j) {
-                        if(gem != gems[i][j] && noteMaker != gems[i][j] && gems[i][j]->getType() == GT_Colour && gem->getGemColour() == gems[i][j]->getGemColour()) {
+                        if(gem != gems[i][j] && noteMaker != gems[i][j] && ((gems[i][j]->getType() == GT_Colour || gems[i][j]->getType() == GT_Explosion) &&
+                                                                            gem->getGemColour() == gems[i][j]->getGemColour())) {
                             gems[i][j]->prepareToTurnIntoBombByNote();
                         }
                     }
