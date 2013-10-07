@@ -94,8 +94,8 @@ bool GemField::init() {
     state = FS_Ready;
    	if(kPreloadField) {
 		const int customField[kFieldHeight][kFieldWidth] = {
-			{2,3,3,2,1,4,2,3},
-			{3,4,3,3,5,2,3,2},
+			{2,3,1,2,1,4,2,3},
+			{3,4,2,3,5,2,3,2},
 			{4,1,1,4,1,3,2,3},
 			{1,5,3,1,5,2,3,4},
 			{3,4,3,3,5,3,4,2},
@@ -801,9 +801,11 @@ void GemField::visit() {
     Point pos = this->getPosition();
     int x = 0, y = 0;
     
-    y = abs(pos.y - kTileSize * kFieldHeight / 4) + 140;
+    y = (visibleSize.height - kTileSize * (kFieldHeight)) / 2 - GameConfig::sharedInstance()->iOSFieldDisplacement.y;
     
-    glScissor(x, y, visibleSize.width, kTileSize * (kFieldHeight + 2.2) - 155);
+    //y = abs(pos.y - kTileSize * kFieldHeight / 4) + 140;
+    
+    glScissor(x, y, visibleSize.width, kTileSize * (kFieldHeight) + GameConfig::sharedInstance()->iOSFieldDisplacement.y - GameConfig::sharedInstance()->iOSFieldDisplacement.x);
     
     Node::visit();
     

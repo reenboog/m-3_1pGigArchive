@@ -2,6 +2,7 @@
 #include "GameScene.h"
 #include "GemField.h"
 #include "Shared.h"
+#include "GameConfig.h"
 
 using std::string;
 
@@ -57,6 +58,13 @@ bool GameScene::init() {
     
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
+    
+    // I'm really sorry for doing this(
+    if(visibleSize.height == 1136) {
+        GameConfig::sharedInstance()->iOSFieldDisplacement = Point(0, 31);
+    } else {
+        GameConfig::sharedInstance()->iOSFieldDisplacement = Point(14, 31);
+    }
 
     back = Sprite::create("gameBack.png");
     back->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
@@ -69,7 +77,7 @@ bool GameScene::init() {
     this->addChild(field);
     
 	float posX = (visibleSize.width - kTileSize * (kFieldWidth)) / 2;
-	float posY = (visibleSize.height - kTileSize * (kFieldHeight)) / 2 - 31;
+	float posY = (visibleSize.height - kTileSize * (kFieldHeight)) / 2 - GameConfig::sharedInstance()->iOSFieldDisplacement.y;
 	
     field->setPosition(posX, posY);
     
@@ -139,7 +147,7 @@ void GameScene::popMatchScoresUpAtPoint(int score, int x, int y) {
     String scoreString = "";
     scoreString.appendWithFormat("%i", score);
 
-    LabelBMFont *label = LabelBMFont::create(scoreString.getCString(), "allerScore.fnt");
+    LabelBMFont *label = LabelBMFont::create(scoreString.getCString(), "cubanoScore.fnt");
     this->addChild(label, zMatchScore);
     
     label->setPosition({x, y});

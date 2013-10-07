@@ -1,6 +1,10 @@
 #ifndef __CONSTANTS_H__
 #define __CONSTANTS_H__
 
+#include "cocos2d.h"
+
+USING_NS_CC;
+
 #define kFieldWidth 8
 #define kFieldHeight 8
 

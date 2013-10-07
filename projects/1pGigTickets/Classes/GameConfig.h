@@ -9,6 +9,10 @@
 #ifndef ___pGigTickets__GameConfig__
 #define ___pGigTickets__GameConfig__
 
+#include "cocos2d.h"
+
+USING_NS_CC;
+
 #define kAppVersion         1
 #define kgameTimer          180
 #define kQuizTimer          5
@@ -40,6 +44,9 @@ public:
     float baseIconValue;
     float fourInRowIconValue;
     float noteIconValue;
+    
+    // forgive me for this(
+    Point iOSFieldDisplacement;
 };
 
 #endif /* defined(___pGigTickets__GameConfig__) */
