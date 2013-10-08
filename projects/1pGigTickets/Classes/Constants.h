@@ -34,6 +34,18 @@ USING_NS_CC;
 
 #define kSpawnBonuses 1
 
+#define kBoostMaxValue 100
+#define kQuizMaxValue 6
+
+#define kMatch3BoostPoints 20
+#define kMatch4BoostPoints 40
+#define kMatch5BoostPoints 75
+#define kMatchWithBombsBoostPoints 85
+
+#define kInitialBoostAttempts 3
+
+#define kBoostFadeOutSpeed 10
+
 const bool kPreloadField = true;
 
 enum GemColour {

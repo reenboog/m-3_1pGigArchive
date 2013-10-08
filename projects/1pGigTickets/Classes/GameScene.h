@@ -8,6 +8,7 @@
 USING_NS_CC;
 
 class GemField;
+class GameUI;
 
 class GameScene: public cocos2d::Layer, public FieldWatcherDelegate {
 public:
@@ -27,7 +28,9 @@ public:
     Point convertLocationToFieldCoordinates(const Point &point);
     Point convertFieldCoordinatesToWorldLocation(const Point &point);
     
-    //some gui
+    // some gui
+    
+    void onBoostBtnPressed();
     
     void popMatchScoresUpAtPoint(int score, int x, int y);
 
@@ -41,14 +44,36 @@ public:
     
     // update logic
     void update(float dt);
+    
+    // boost/quiz
+    void setBoost(float value);
+    void setQuiz(float value);
+    
+    void addBoost(float value);
+    void addQuiz(float value);
+    
+    // reset
+    void reset();
 private:
     GemField *field;
+    GameUI *ui;
     Sprite *back;
     
     bool swipeEnded;
 	bool canTouch;
     
+    bool gameOver;
+    
     Point firstTouchLocation;
+    
+    float currentTime;
+    int score;
+    int scoreMultiplier;
+    
+    // boost/quiz value
+    float boostValue;
+    float quizValue;
+    int boostAttemptsLeft;
 };
 
 #endif

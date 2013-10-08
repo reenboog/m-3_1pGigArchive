@@ -4,6 +4,8 @@
 #include "Shared.h"
 #include "GameConfig.h"
 
+#include "GameUI.h"
+
 using std::string;
 
 #pragma mark - cocos2d stuff
@@ -13,6 +15,18 @@ GameScene::~GameScene() {
 
 GameScene::GameScene() {
     field = nullptr;
+    back = nullptr;
+    ui = nullptr;
+
+    gameOver = true;
+
+    boostValue = 0;
+    quizValue = 0;
+    boostAttemptsLeft = kInitialBoostAttempts;
+    scoreMultiplier = 1;
+    
+    currentTime = GameConfig::sharedInstance()->gameTimer;
+    score = 0;
 }
 
 #pragma mark - init
@@ -22,6 +36,11 @@ Scene * GameScene::scene() {
 
     GameScene *layer = GameScene::create();
     scene->addChild(layer);
+    
+    GameUI *ui = GameUI::create();
+    
+    layer->ui = ui;
+    scene->addChild(ui);
 
     return scene;
 }
@@ -89,20 +108,57 @@ bool GameScene::init() {
 
     Director::getInstance()->getTouchDispatcher()->addTargetedDelegate(this, 0, true);
     
+    scheduleUpdate();
+    
+    this->runAction(Sequence::create(DelayTime::create(0.5),
+                                     CallFunc::create(CC_CALLBACK_0(GameScene::reset, this)), NULL));
+    
     return true;
+}
+
+void GameScene::reset() {
+    boostValue = 0;
+    quizValue = 0;
+    boostAttemptsLeft = kInitialBoostAttempts;
+    
+    currentTime = GameConfig::sharedInstance()->gameTimer;
+    score = 0;
+    scoreMultiplier = 1;
+    
+    gameOver = false;
+    
+    // reset ui
+    // in case we have enough plectrums
+    ui->setBoostBtnEnabled(true);
+    ui->setscore(0);
+    ui->setTime(currentTime);
+    ui->setscore(0);
+    ui->setPlectrums(GameConfig::sharedInstance()->currentPlectrums);
 }
 
 #pragma mark - field watcher delegate
 
 void GameScene::onGemDestroyed(GemColour colour, int x, int y, int score) {
-	// get is destroyed
+    score *= scoreMultiplier;
+    
+    this->score += score;
+    ui->setscore(this->score);
     
     Point worldPos = this->convertFieldCoordinatesToWorldLocation({x, y});
     this->popMatchScoresUpAtPoint(score, worldPos.x, worldPos.y);
+    
+    // apply plectrums if any
+    if(colour == GC_Plectrum) {
+        GameConfig::sharedInstance()->currentPlectrums++;
+        ui->setPlectrums(GameConfig::sharedInstance()->currentPlectrums);
+    }
 }
 
 void GameScene::onGemsMatched(int length, GemColour colour, int startX, int startY, int endX, int endY, int score) {
-	// on match
+    score *= scoreMultiplier;
+    
+	this->score += score;
+    ui->setscore(this->score);
     
     float stepX = 1.0f;
     float stepY = -1.0f;
@@ -118,6 +174,36 @@ void GameScene::onGemsMatched(int length, GemColour colour, int startX, int star
     worldPos = worldPos + Point(stepX * ((length - 1) * kTileSize) / 2.0f, stepY * ((length - 1) * kTileSize) / 2.0f);
     
     this->popMatchScoresUpAtPoint(score, worldPos.x, worldPos.y);
+    
+    // apply boost if any
+    int scorePerGem = score / length;
+    
+    float boostPoints = 0;
+    
+    if(scorePerGem == GameConfig::sharedInstance()->baseIconValue) {
+        switch(length) {
+            case 3:
+                boostPoints = kMatch3BoostPoints;
+                break;
+            case 4:
+                boostPoints = kMatch4BoostPoints;
+                break;
+            case 5:
+            default:
+                boostPoints = kMatch5BoostPoints;
+                break;
+        }
+    } else {
+        boostPoints = kMatchWithBombsBoostPoints;
+    }
+    
+    this->addBoost(boostPoints);
+
+    // apply plectrums if any
+    if(colour == GC_Plectrum) {
+        GameConfig::sharedInstance()->currentPlectrums += length;
+        ui->setPlectrums(GameConfig::sharedInstance()->currentPlectrums);
+    }
 }
 
 void GameScene::onGemsToBeShuffled() {
@@ -138,9 +224,7 @@ void GameScene::onGemsStartedSwapping() {
 	canTouch = false;
 }
 
-#pragma mark - update logic
-
-#pragma mark - 
+#pragma mark -
 
 void GameScene::popMatchScoresUpAtPoint(int score, int x, int y) {
     
@@ -164,11 +248,75 @@ void GameScene::popMatchScoresUpAtPoint(int score, int x, int y) {
         label->removeFromParent();
     }),
                                       NULL));
-
 }
 
-void GameScene::update(float dt) {
+#pragma mark - ui
+
+void GameScene::onBoostBtnPressed() {
+    boostAttemptsLeft--;
     
+    if(boostAttemptsLeft <= 0) {
+        boostAttemptsLeft = 0;
+        
+        // ui:: block boost btn
+        ui->setBoostBtnEnabled(false);
+    }
+}
+
+#pragma mark - update logic
+
+void GameScene::update(float dt) {
+    if(gameOver) {
+        return;
+    }
+    
+    // apply time
+    currentTime -= dt;
+    
+    if(currentTime < 0) {
+        currentTime = 0;
+    }
+    
+    ui->setTime(currentTime);
+    
+    if(scoreMultiplier == 1) {
+        boostValue -= dt * kBoostFadeOutSpeed;
+        this->setBoost(boostValue);
+    }
+}
+
+void GameScene::setBoost(float value) {
+    boostValue = value;
+
+    if(boostValue <= 0) {
+        boostValue = 0;
+    } else if(boostValue > kBoostMaxValue) {
+        boostValue = kBoostMaxValue;
+    }
+    
+    ui->setBoost(boostValue);
+}
+
+void GameScene::setQuiz(float value) {
+    quizValue = value;
+    
+    if(quizValue <= 0) {
+        quizValue = 0;
+    } else if(quizValue > kQuizMaxValue) {
+        quizValue = kQuizMaxValue;
+    }
+    
+    ui->setQuiz(quizValue);
+}
+
+void GameScene::addBoost(float value) {
+    boostValue += value;
+    setBoost(boostValue);
+}
+
+void GameScene::addQuiz(float value) {
+    quizValue += value;
+    setQuiz(quizValue);
 }
 
 #pragma mark - touches

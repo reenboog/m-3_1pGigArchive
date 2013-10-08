@@ -29,13 +29,16 @@ GameConfig * GameConfig::sharedInstance() {
 void GameConfig::load() {
     version = kAppVersion;
     
-    gameTimer = kgameTimer;
+    gameTimer = kGameTimer;
     quizTimer = kQuizTimer;
     qMultiplier = kQMultiplier;
     
     baseIconValue = kBaseIconValue;
     fourInRowIconValue = kFourInRowIconValue;
     noteIconValue = kNoteIconValue;
+    
+    // load defaults
+    currentPlectrums = 0;
 }
 
 void GameConfig::save() {

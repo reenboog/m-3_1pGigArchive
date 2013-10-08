@@ -14,7 +14,7 @@
 USING_NS_CC;
 
 #define kAppVersion         1
-#define kgameTimer          180
+#define kGameTimer          180
 #define kQuizTimer          5
 #define kQMultiplier        5
 
@@ -44,6 +44,8 @@ public:
     float baseIconValue;
     float fourInRowIconValue;
     float noteIconValue;
+    
+    int currentPlectrums;
     
     // forgive me for this(
     Point iOSFieldDisplacement;

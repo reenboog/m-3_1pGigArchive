@@ -33,6 +33,7 @@
 		B8697B6117E5D6880090EA88 /* Icon-144.png in Resources */ = {isa = PBXBuildFile; fileRef = B8697B5F17E5D6880090EA88 /* Icon-144.png */; };
 		B87B5AF717E4D17900975FD5 /* Gem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B87B5AF317E4D17900975FD5 /* Gem.cpp */; };
 		B87B5AF817E4D17900975FD5 /* GemField.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B87B5AF517E4D17900975FD5 /* GemField.cpp */; };
+		B8A353A2180328F300872996 /* GameUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8A353A0180328F200872996 /* GameUI.cpp */; };
 		B8CE576417E2F4F800BBBDAE /* GameScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8CE576217E2F4F800BBBDAE /* GameScene.cpp */; };
 		B8CE576817E3107100BBBDAE /* GameConfig.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8CE576617E3107000BBBDAE /* GameConfig.cpp */; };
 		B8CE577517E312EB00BBBDAE /* rapidjson in Resources */ = {isa = PBXBuildFile; fileRef = B8CE577417E312EB00BBBDAE /* rapidjson */; };
@@ -217,6 +218,8 @@
 		B87B5AF517E4D17900975FD5 /* GemField.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GemField.cpp; path = ../Classes/GemField.cpp; sourceTree = "<group>"; };
 		B87B5AF617E4D17900975FD5 /* GemField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GemField.h; path = ../Classes/GemField.h; sourceTree = "<group>"; };
 		B87B5AF917E4D2C300975FD5 /* FieldWatcherDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FieldWatcherDelegate.h; path = ../Classes/FieldWatcherDelegate.h; sourceTree = "<group>"; };
+		B8A353A0180328F200872996 /* GameUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameUI.cpp; path = ../Classes/GameUI.cpp; sourceTree = "<group>"; };
+		B8A353A1180328F200872996 /* GameUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameUI.h; path = ../Classes/GameUI.h; sourceTree = "<group>"; };
 		B8CE576217E2F4F800BBBDAE /* GameScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameScene.cpp; path = ../Classes/GameScene.cpp; sourceTree = "<group>"; };
 		B8CE576317E2F4F800BBBDAE /* GameScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameScene.h; path = ../Classes/GameScene.h; sourceTree = "<group>"; };
 		B8CE576617E3107000BBBDAE /* GameConfig.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameConfig.cpp; path = ../Classes/GameConfig.cpp; sourceTree = "<group>"; };
@@ -294,6 +297,8 @@
 				B87B5AF517E4D17900975FD5 /* GemField.cpp */,
 				B87B5AF617E4D17900975FD5 /* GemField.h */,
 				B87B5AF917E4D2C300975FD5 /* FieldWatcherDelegate.h */,
+				B8A353A0180328F200872996 /* GameUI.cpp */,
+				B8A353A1180328F200872996 /* GameUI.h */,
 			);
 			name = Classes;
 			path = ../classes;
@@ -578,6 +583,7 @@
 				B87B5AF717E4D17900975FD5 /* Gem.cpp in Sources */,
 				B87B5AF817E4D17900975FD5 /* GemField.cpp in Sources */,
 				B8230BC117EA03BD00C41F7F /* Shared.cpp in Sources */,
+				B8A353A2180328F300872996 /* GameUI.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
