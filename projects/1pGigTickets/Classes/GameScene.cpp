@@ -78,13 +78,6 @@ bool GameScene::init() {
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Point origin = Director::getInstance()->getVisibleOrigin();
     
-    // I'm really sorry for doing this(
-    if(visibleSize.height == 1136) {
-        GameConfig::sharedInstance()->iOSFieldDisplacement = Point(0, 31);
-    } else {
-        GameConfig::sharedInstance()->iOSFieldDisplacement = Point(14, 31);
-    }
-
     back = Sprite::create("gameBack.png");
     back->setPosition(Point(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 

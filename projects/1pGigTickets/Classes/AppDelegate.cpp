@@ -26,6 +26,16 @@ bool AppDelegate::applicationDidFinishLaunching() {
     // set FPS. the default value is 1.0/60 if you don't call this
     director->setAnimationInterval(1.0 / 60);
     
+    Size visibleSize = Director::getInstance()->getVisibleSize();
+    // I'm really sorry for doing this(
+    if(visibleSize.height == 1136) {
+        GameConfig::sharedInstance()->iOSFieldDisplacement = Point(0, 31);
+        FileUtils::getInstance()->addSearchPath("Res/iphone5");
+    } else {
+        GameConfig::sharedInstance()->iOSFieldDisplacement = Point(14, 48);
+        FileUtils::getInstance()->addSearchPath("Res/iphone");
+    }
+    
     FileUtils::getInstance()->addSearchPath("Res");
     
     // load game config

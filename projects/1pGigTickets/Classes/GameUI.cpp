@@ -44,31 +44,48 @@ bool GameUI::init() {
     
     // pause
     Size visibleSize = Director::getInstance()->getVisibleSize();
-    //Point origin = Director::getInstance()->getVisibleOrigin();
-
+    
+    float pauseMenuDisp = 0.968;
+    float timeMountDisp = 0.968;
+    float scoreMountDisp = 0.968;
+    float plectrumDisp = 0.95;
+    float boostMenuDisp = 0.84;
+    float boostBackDisp = 0.86;
+    float quizBackDisp = 0.86;
+    
+    if(visibleSize.height == 1136) {
+        pauseMenuDisp = 0.95;
+        timeMountDisp = 0.95;
+        scoreMountDisp = 0.95;
+        plectrumDisp = 0.94;
+        boostMenuDisp = 0.84;
+        boostBackDisp = 0.85;
+        quizBackDisp = 0.85;
+    }
+    
     pauseBtn = MenuItemImage::create("ui/pauseBtn.png", "ui/pauseBtnOn.png", "ui/pauseBtnOn.png", CC_CALLBACK_1(GameUI::onPauseBtnPressed, this));
     pauseBtn->setPosition({0, 0});
     
     Menu *pauseMenu = Menu::create(pauseBtn, NULL);
-    pauseMenu->setPosition({visibleSize.width * 0.06, visibleSize.height * 0.95});
+    pauseMenu->setPosition({visibleSize.width * 0.06, visibleSize.height * pauseMenuDisp});
     
     this->addChild(pauseMenu);
     
     // time mount
     timeMount = Sprite::create("ui/timeMount.png");
-    timeMount->setPosition({visibleSize.width * 0.23, visibleSize.height * 0.95});
+    timeMount->setPosition({visibleSize.width * 0.23, visibleSize.height * timeMountDisp});
     
     this->addChild(timeMount);
     
     // score mount
     scoreMount = Sprite::create("ui/scoreMount.png");
-    scoreMount->setPosition({visibleSize.width * 0.78, visibleSize.height * 0.95});
+    scoreMount->setPosition({visibleSize.width * 0.78, visibleSize.height * scoreMountDisp});
     
     this->addChild(scoreMount);
     
     // plectrums mount
     plectrumsMount = Sprite::create("ui/plectrumsMount.png");
-    plectrumsMount->setPosition({visibleSize.width * 0.5, visibleSize.height * 0.94});
+    plectrumsMount->setPosition({visibleSize.width * 0.5, visibleSize.height * plectrumDisp});
     
     this->addChild(plectrumsMount);
 
@@ -78,14 +95,14 @@ bool GameUI::init() {
     boostBtn->setPosition({0, 0});
     
     Menu *boostMenu = Menu::create(boostBtn, NULL);
-    boostMenu->setPosition({visibleSize.width * 0.5, visibleSize.height * 0.84});
+    boostMenu->setPosition({visibleSize.width * 0.5, visibleSize.height * boostMenuDisp});
     
     this->addChild(boostMenu);
     
     // boost mount
     
     boostBack = Sprite::create("ui/indicatorBoost.png");
-    boostBack->setPosition({visibleSize.width * 0.21, visibleSize.height * 0.85});
+    boostBack->setPosition({visibleSize.width * 0.21, visibleSize.height * boostBackDisp});
     
     this->addChild(boostBack);
     
@@ -104,7 +121,7 @@ bool GameUI::init() {
     // quiz mount
     
     quizBack = Sprite::create("ui/indicatorQuiz.png");
-    quizBack->setPosition({visibleSize.width * 0.79, visibleSize.height * 0.85});
+    quizBack->setPosition({visibleSize.width * 0.79, visibleSize.height * quizBackDisp});
     
     this->addChild(quizBack);
     
