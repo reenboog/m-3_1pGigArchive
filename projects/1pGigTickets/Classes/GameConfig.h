@@ -17,10 +17,13 @@ USING_NS_CC;
 #define kGameTimer          180
 #define kQuizTimer          5
 #define kQMultiplier        5
+#define kBoostMultiplier    2
 
 #define kBaseIconValue      50
 #define kFourInRowIconValue 500
 #define kNoteIconValue      1000
+
+#define kInitialPlectrums   100;
 
 class GameConfig {
 private:
@@ -40,6 +43,7 @@ public:
     float gameTimer;
     float quizTimer;
     float qMultiplier;
+    float boostMultiplier;
     
     float baseIconValue;
     float fourInRowIconValue;

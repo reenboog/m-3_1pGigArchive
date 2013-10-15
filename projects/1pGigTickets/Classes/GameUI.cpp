@@ -8,6 +8,7 @@
 
 #include "GameUI.h"
 #include "Constants.h"
+#include "TicketScreen.h"
 
 #define kIndicatorStartAngle 55
 
@@ -148,7 +149,7 @@ bool GameUI::init() {
     scoreLabel->setPosition({scoreMount->getContentSize().width * 0.9, scoreMount->getContentSize().height * 0.5});
     scoreMount->addChild(scoreLabel);
     
-    plectrumsLabel = LabelBMFont::create("9", "allerWhiteScores.fnt");
+    plectrumsLabel = LabelBMFont::create("0", "allerWhiteScores.fnt");
     plectrumsLabel->setPosition({plectrumsMount->getContentSize().width * 0.5, plectrumsMount->getContentSize().height * 0.5});
     plectrumsMount->addChild(plectrumsLabel);
     
@@ -159,6 +160,8 @@ bool GameUI::init() {
 
 void GameUI::onPauseBtnPressed(Object *sender) {
     CCLOG("pause");
+    
+    Director::getInstance()->replaceScene(TransitionFade::create(0.3, TicketScreen::scene()));
 }
 
 void GameUI::onBoostBtnPressed(Object *sender) {

@@ -32,13 +32,14 @@ void GameConfig::load() {
     gameTimer = kGameTimer;
     quizTimer = kQuizTimer;
     qMultiplier = kQMultiplier;
+    boostMultiplier = kBoostMultiplier;
     
     baseIconValue = kBaseIconValue;
     fourInRowIconValue = kFourInRowIconValue;
     noteIconValue = kNoteIconValue;
     
     // load defaults
-    currentPlectrums = 0;
+    currentPlectrums = kInitialPlectrums;
 }
 
 void GameConfig::save() {

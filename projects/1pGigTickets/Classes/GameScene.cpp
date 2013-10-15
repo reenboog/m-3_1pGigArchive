@@ -22,7 +22,7 @@ GameScene::GameScene() {
 
     boostValue = 0;
     quizValue = 0;
-    boostAttemptsLeft = kInitialBoostAttempts;
+    boostAttemptsLeft = kBoostMaxAttempts;
     scoreMultiplier = 1;
     
     currentTime = GameConfig::sharedInstance()->gameTimer;
@@ -41,6 +41,8 @@ Scene * GameScene::scene() {
     
     layer->ui = ui;
     scene->addChild(ui);
+    
+    layer->reset();
 
     return scene;
 }
@@ -103,16 +105,13 @@ bool GameScene::init() {
     
     scheduleUpdate();
     
-    this->runAction(Sequence::create(DelayTime::create(0.5),
-                                     CallFunc::create(CC_CALLBACK_0(GameScene::reset, this)), NULL));
-    
     return true;
 }
 
 void GameScene::reset() {
     boostValue = 0;
     quizValue = 0;
-    boostAttemptsLeft = kInitialBoostAttempts;
+    boostAttemptsLeft = kBoostMaxAttempts;
     
     currentTime = GameConfig::sharedInstance()->gameTimer;
     score = 0;

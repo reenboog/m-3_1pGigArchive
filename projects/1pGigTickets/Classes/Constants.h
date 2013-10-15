@@ -22,15 +22,11 @@ USING_NS_CC;
 #define zLighting 90
 #define zMatchScore 100
 
-#define kAITurnDelay 0.5f
-#define kTipDelay 1.f
 
 #define kTransformationTime 0.3f
 
 #define kColumnsFallDelay 0
 #define kRowsFallDelay 0
-
-#define kPlayersAmount 2
 
 #define kSpawnBonuses 1
 
@@ -42,9 +38,12 @@ USING_NS_CC;
 #define kMatch5BoostPoints 75
 #define kMatchWithBombsBoostPoints 85
 
-#define kInitialBoostAttempts 3
+#define kBoostMaxAttempts 3
 
 #define kBoostFadeOutSpeed 10
+
+#define kPlectrumsPerBoostBtnPressed 5
+#define kBoostingTime 20
 
 const bool kPreloadField = true;
 

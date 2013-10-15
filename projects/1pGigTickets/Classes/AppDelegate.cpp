@@ -1,6 +1,7 @@
 
 #include "AppDelegate.h"
 #include "GameScene.h"
+#include "TicketScreen.h"
 #include "GameConfig.h"
 
 USING_NS_CC;
@@ -42,7 +43,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     GameConfig::sharedInstance()->load();
 
     // create a scene. it's an autorelease object
-    Scene *scene = GameScene::scene();
+    Scene *scene = TicketScreen::scene();
 
     // run
     director->runWithScene(scene);
