@@ -83,13 +83,12 @@ bool TicketScreen::init() {
     plectrumsMount->setPosition({visibleSize.width * 0.88, visibleSize.height * plectrumsDisp});
     this->addChild(plectrumsMount);
     
-    plectrumsLabel = LabelBMFont::create("0", "allerWhiteScores.fnt");
+    plectrumsLabel = LabelBMFont::create("0", "allerTicketsScreenWhite.fnt");
     
     String *plectrums = String::createWithFormat("%i", GameConfig::sharedInstance()->currentPlectrums);
 
     plectrumsLabel->setString(plectrums->getCString());
-    plectrumsLabel->setPosition({plectrumsMount->getContentSize().width * 0.5, plectrumsMount->getContentSize().height * 0.5});
-    plectrumsLabel->setScale(0.95);
+    plectrumsLabel->setPosition({plectrumsMount->getContentSize().width * 0.5, plectrumsMount->getContentSize().height * 0.62});
     plectrumsMount->addChild(plectrumsLabel);
 
     // table view

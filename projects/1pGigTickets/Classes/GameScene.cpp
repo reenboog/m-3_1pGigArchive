@@ -3,8 +3,9 @@
 #include "GemField.h"
 #include "Shared.h"
 #include "GameConfig.h"
-
+#include "ScoreUI.h"
 #include "GameUI.h"
+#include "QuizUI.h"
 
 using std::string;
 
@@ -17,6 +18,8 @@ GameScene::GameScene() {
     field = nullptr;
     back = nullptr;
     ui = nullptr;
+    scoreUI = nullptr;
+    quizUI = nullptr;
 
     gameOver = true;
 
@@ -41,6 +44,18 @@ Scene * GameScene::scene() {
     
     layer->ui = ui;
     scene->addChild(ui);
+    
+    ScoreUI *scoreUI = ScoreUI::create();
+    scoreUI->gameLayer = layer;
+    layer->scoreUI = scoreUI;
+
+    scene->addChild(scoreUI);
+    
+    QuizUI *quizUI = QuizUI::create();
+    quizUI->gameLayer = layer;
+    layer->quizUI = quizUI;
+    
+    scene->addChild(quizUI);
     
     layer->reset();
 
@@ -193,8 +208,10 @@ void GameScene::onGemsMatched(int length, GemColour colour, int startX, int star
 
     // apply plectrums if any
     if(colour == GC_Plectrum) {
-        GameConfig::sharedInstance()->currentPlectrums += length;
+        GameConfig::sharedInstance()->currentPlectrums += 1;
         ui->setPlectrums(GameConfig::sharedInstance()->currentPlectrums);
+    } else if(colour == GC_Question) {
+        this->showQuizUI();
     }
 }
 
@@ -242,6 +259,19 @@ void GameScene::popMatchScoresUpAtPoint(int score, int x, int y) {
                                       NULL));
 }
 
+#pragma mark - quiz
+
+void GameScene::showQuizUI() {
+    quizUI->popUp();
+    
+    this->onExit();
+}
+
+void GameScene::onQuizUIPoppedOut() {
+    this->onEnter();
+    ui->onEnter();
+}
+
 #pragma mark - ui
 
 void GameScene::onBoostBtnPressed() {
@@ -253,6 +283,22 @@ void GameScene::onBoostBtnPressed() {
         // ui:: block boost btn
         ui->setBoostBtnEnabled(false);
     }
+}
+
+void GameScene::onExit() {
+    Layer::onExit();
+    
+    if(ui) {
+        ui->onExit();
+    }
+}
+
+void GameScene::onEnter() {
+    Layer::onEnter();
+    
+//    if(ui) {
+//        ui->onEnter();
+//    }
 }
 
 #pragma mark - update logic
@@ -267,6 +313,8 @@ void GameScene::update(float dt) {
     
     if(currentTime < 0) {
         currentTime = 0;
+
+        onGameOver();
     }
     
     ui->setTime(currentTime);
@@ -275,6 +323,15 @@ void GameScene::update(float dt) {
         boostValue -= dt * kBoostFadeOutSpeed;
         this->setBoost(boostValue);
     }
+}
+
+void GameScene::onGameOver() {
+    gameOver = true;
+    
+    this->onExit();
+    
+    scoreUI->setScore(score);
+    scoreUI->popUp();
 }
 
 void GameScene::setBoost(float value) {

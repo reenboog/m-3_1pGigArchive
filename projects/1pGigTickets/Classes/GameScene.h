@@ -9,6 +9,8 @@ USING_NS_CC;
 
 class GemField;
 class GameUI;
+class ScoreUI;
+class QuizUI;
 
 class GameScene: public cocos2d::Layer, public FieldWatcherDelegate {
 public:
@@ -42,8 +44,17 @@ public:
 	virtual void onGemsFinishedMoving();
 	virtual void onMoveMade(bool legal);
     
+    // quiz
+    void showQuizUI();
+    void onQuizUIPoppedOut();
+    
     // update logic
     void update(float dt);
+    void onGameOver();
+    
+    // ui freeze
+    void onExit();
+    void onEnter();
     
     // boost/quiz
     void setBoost(float value);
@@ -57,6 +68,9 @@ public:
 private:
     GemField *field;
     GameUI *ui;
+    ScoreUI *scoreUI;
+    QuizUI *quizUI;
+
     Sprite *back;
     
     bool swipeEnded;

@@ -42,6 +42,9 @@
 		B8CE578317E35A6900BBBDAE /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = B8CE577C17E35A6900BBBDAE /* Default.png */; };
 		B8CE578417E35A6900BBBDAE /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B8CE577D17E35A6900BBBDAE /* Default@2x.png */; };
 		B8F426A8180D9D1700AF20A7 /* TicketScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8F426A6180D9D1700AF20A7 /* TicketScreen.cpp */; };
+		B8F426B7180E4E0000AF20A7 /* ScoreUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8F426B5180E4E0000AF20A7 /* ScoreUI.cpp */; };
+		B8F426BA180E644300AF20A7 /* AdScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8F426B8180E643E00AF20A7 /* AdScreen.cpp */; };
+		B8F426BD180EB15200AF20A7 /* QuizUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8F426BB180EB14E00AF20A7 /* QuizUI.cpp */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
@@ -232,6 +235,12 @@
 		B8CE577D17E35A6900BBBDAE /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = SOURCE_ROOT; };
 		B8F426A6180D9D1700AF20A7 /* TicketScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TicketScreen.cpp; path = ../Classes/TicketScreen.cpp; sourceTree = "<group>"; };
 		B8F426A7180D9D1700AF20A7 /* TicketScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TicketScreen.h; path = ../Classes/TicketScreen.h; sourceTree = "<group>"; };
+		B8F426B5180E4E0000AF20A7 /* ScoreUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ScoreUI.cpp; path = ../Classes/ScoreUI.cpp; sourceTree = "<group>"; };
+		B8F426B6180E4E0000AF20A7 /* ScoreUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ScoreUI.h; path = ../Classes/ScoreUI.h; sourceTree = "<group>"; };
+		B8F426B8180E643E00AF20A7 /* AdScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AdScreen.cpp; path = ../Classes/AdScreen.cpp; sourceTree = "<group>"; };
+		B8F426B9180E643F00AF20A7 /* AdScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AdScreen.h; path = ../Classes/AdScreen.h; sourceTree = "<group>"; };
+		B8F426BB180EB14E00AF20A7 /* QuizUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = QuizUI.cpp; path = ../Classes/QuizUI.cpp; sourceTree = "<group>"; };
+		B8F426BC180EB15100AF20A7 /* QuizUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = QuizUI.h; path = ../Classes/QuizUI.h; sourceTree = "<group>"; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -289,7 +298,6 @@
 				B8F426A5180D9CEC00AF20A7 /* app */,
 				B8F426A4180D9CDB00AF20A7 /* constants&settings */,
 				B8F426A3180D9CBC00AF20A7 /* field */,
-				B87B5AF917E4D2C300975FD5 /* FieldWatcherDelegate.h */,
 				B8F42697180D9CAA00AF20A7 /* ui */,
 			);
 			name = Classes;
@@ -386,6 +394,12 @@
 				B8A353A1180328F200872996 /* GameUI.h */,
 				B8F426A6180D9D1700AF20A7 /* TicketScreen.cpp */,
 				B8F426A7180D9D1700AF20A7 /* TicketScreen.h */,
+				B8F426B5180E4E0000AF20A7 /* ScoreUI.cpp */,
+				B8F426B6180E4E0000AF20A7 /* ScoreUI.h */,
+				B8F426B8180E643E00AF20A7 /* AdScreen.cpp */,
+				B8F426B9180E643F00AF20A7 /* AdScreen.h */,
+				B8F426BB180EB14E00AF20A7 /* QuizUI.cpp */,
+				B8F426BC180EB15100AF20A7 /* QuizUI.h */,
 			);
 			name = ui;
 			sourceTree = "<group>";
@@ -393,6 +407,7 @@
 		B8F426A3180D9CBC00AF20A7 /* field */ = {
 			isa = PBXGroup;
 			children = (
+				B87B5AF917E4D2C300975FD5 /* FieldWatcherDelegate.h */,
 				B87B5AF317E4D17900975FD5 /* Gem.cpp */,
 				B87B5AF417E4D17900975FD5 /* Gem.h */,
 				B87B5AF517E4D17900975FD5 /* GemField.cpp */,
@@ -622,6 +637,9 @@
 				B8230BC117EA03BD00C41F7F /* Shared.cpp in Sources */,
 				B8A353A2180328F300872996 /* GameUI.cpp in Sources */,
 				B8F426A8180D9D1700AF20A7 /* TicketScreen.cpp in Sources */,
+				B8F426B7180E4E0000AF20A7 /* ScoreUI.cpp in Sources */,
+				B8F426BA180E644300AF20A7 /* AdScreen.cpp in Sources */,
+				B8F426BD180EB15200AF20A7 /* QuizUI.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
