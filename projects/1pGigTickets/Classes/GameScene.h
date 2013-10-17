@@ -88,6 +88,8 @@ private:
     int score;
     int scoreMultiplier;
     
+    float boostTimer;
+    
     // boost/quiz value
     float boostValue;
     float quizValue;

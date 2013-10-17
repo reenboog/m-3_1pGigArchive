@@ -13,6 +13,8 @@
 
 USING_NS_CC;
 
+class GameScene;
+
 class GameUI: public Layer {
 public:
     ~GameUI();
@@ -33,6 +35,9 @@ public:
     void setBoost(float value);
     void setQuiz(float value);
     void setPlectrums(int value);
+    
+    void fadeBoostArrowIn();
+    void fadeBoostArrowOut();
 private:
     // stuff
     MenuItem *pauseBtn;
@@ -53,6 +58,8 @@ private:
     LabelBMFont *timeLabel;
     LabelBMFont *scoreLabel;
     LabelBMFont *plectrumsLabel;
+public:
+    GameScene *gameLayer;
 };
 
 #endif /* defined(___pGigTickets__GameUI__) */

@@ -9,6 +9,7 @@
 #include "GameUI.h"
 #include "Constants.h"
 #include "TicketScreen.h"
+#include "GameScene.h"
 
 #define kIndicatorStartAngle 66
 
@@ -34,6 +35,8 @@ GameUI::GameUI(): Layer() {
     timeLabel = nullptr;
     scoreLabel = nullptr;
     plectrumsLabel = nullptr;
+    
+    gameLayer = nullptr;
 }
 
 #pragma mark - init
@@ -167,8 +170,7 @@ void GameUI::onPauseBtnPressed(Object *sender) {
 }
 
 void GameUI::onBoostBtnPressed(Object *sender) {
-    CCLOG("boost");
-    
+    gameLayer->onBoostBtnPressed();
 }
 
 #pragma mark - set/get
@@ -183,6 +185,14 @@ void GameUI::setQuiz(float value) {
     float rotation = -kIndicatorStartAngle + (kIndicatorStartAngle * 2) / kQuizMaxValue * value;
     
     quizArrow->setRotation(rotation);
+}
+
+void GameUI::fadeBoostArrowIn() {
+    boostArrow->runAction(RotateTo::create(0.3, kIndicatorStartAngle));
+}
+
+void GameUI::fadeBoostArrowOut() {
+    boostArrow->runAction(RotateTo::create(0.35, -kIndicatorStartAngle));
 }
 
 void GameUI::setTime(int seconds) {
@@ -235,5 +245,16 @@ void GameUI::setPlectrums(int value) {
 #pragma mark - boost btn
 
 void GameUI::setBoostBtnEnabled(bool enabled) {
+    if(enabled) {
+        if(!boostBtn->isEnabled()) {
+            boostBtn->runAction(RepeatForever::create(Sequence::create(ScaleTo::create(0.2, 1.1),
+                                                                       ScaleTo::create(0.4, 1.0),
+                                                                       NULL)));
+        }
+    } else {
+        boostBtn->stopAllActions();
+        boostBtn->setScale(1);
+    }
+    
     boostBtn->setEnabled(enabled);
 }

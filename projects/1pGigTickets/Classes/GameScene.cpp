@@ -27,6 +27,7 @@ GameScene::GameScene() {
     quizValue = 0;
     boostAttemptsLeft = kBoostMaxAttempts;
     scoreMultiplier = 1;
+    boostTimer = 0;
     
     currentTime = GameConfig::sharedInstance()->gameTimer;
     score = 0;
@@ -41,6 +42,7 @@ Scene * GameScene::scene() {
     scene->addChild(layer);
     
     GameUI *ui = GameUI::create();
+    ui->gameLayer = layer;
     
     layer->ui = ui;
     scene->addChild(ui);
@@ -131,12 +133,13 @@ void GameScene::reset() {
     currentTime = GameConfig::sharedInstance()->gameTimer;
     score = 0;
     scoreMultiplier = 1;
+    boostTimer = 0;
     
     gameOver = false;
     
     // reset ui
     // in case we have enough plectrums
-    ui->setBoostBtnEnabled(true);
+    ui->setBoostBtnEnabled(false);
     ui->setscore(0);
     ui->setTime(currentTime);
     ui->setscore(0);
@@ -202,7 +205,9 @@ void GameScene::onGemsMatched(int length, GemColour colour, int startX, int star
         boostPoints = kMatchWithBombsBoostPoints;
     }
     
-    this->addBoost(boostPoints);
+    if(scoreMultiplier == 1) {
+        this->addBoost(boostPoints);
+    }
 
     // apply plectrums if any
     if(colour == GC_Plectrum) {
@@ -281,13 +286,18 @@ void GameScene::onCorrectQuizAnswer() {
 #pragma mark - ui
 
 void GameScene::onBoostBtnPressed() {
-    boostAttemptsLeft--;
-    
-    if(boostAttemptsLeft <= 0) {
-        boostAttemptsLeft = 0;
+    if(boostAttemptsLeft > 0 && boostValue > kBoostEffectMinimalValueRequired) {
+        boostAttemptsLeft--;
         
-        // ui:: block boost btn
+        scoreMultiplier = 2;
+        boostTimer = kBoostingTime;
+        
         ui->setBoostBtnEnabled(false);
+        ui->fadeBoostArrowIn();
+        
+        if(boostAttemptsLeft <= 0) {
+            boostAttemptsLeft = 0;
+        }
     }
 }
 
@@ -328,6 +338,21 @@ void GameScene::update(float dt) {
     if(scoreMultiplier == 1) {
         boostValue -= dt * kBoostFadeOutSpeed;
         this->setBoost(boostValue);
+    } else {
+        if(boostTimer > 0) {
+            boostTimer -= dt;
+        } else if(boostTimer <= 0 && boostTimer != -100) {
+            boostTimer = -100;
+            ui->fadeBoostArrowOut();
+            
+            this->runAction(Sequence::create(DelayTime::create(0.4),
+                                             CallFunc::create([this](){
+                                                scoreMultiplier = 1;
+                                                boostValue = 0;
+                                                boostTimer = 0;
+                                             }),
+                                             NULL));
+        }
     }
 }
 
@@ -341,7 +366,17 @@ void GameScene::onGameOver() {
 }
 
 void GameScene::setBoost(float value) {
+    if(boostAttemptsLeft <= 0) {
+        return;
+    }
+    
     boostValue = value;
+    
+    if(boostValue > kBoostEffectMinimalValueRequired) {
+        ui->setBoostBtnEnabled(true);
+    } else {
+        ui->setBoostBtnEnabled(false);
+    }
 
     if(boostValue <= 0) {
         boostValue = 0;
@@ -349,7 +384,9 @@ void GameScene::setBoost(float value) {
         boostValue = kBoostMaxValue;
     }
     
-    ui->setBoost(boostValue);
+    if(scoreMultiplier == 1) {
+        ui->setBoost(boostValue);
+    }
 }
 
 void GameScene::setQuiz(float value) {

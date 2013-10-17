@@ -38,12 +38,14 @@ USING_NS_CC;
 #define kMatch5BoostPoints 75
 #define kMatchWithBombsBoostPoints 85
 
+#define kBoostEffectMinimalValueRequired 55
+
 #define kBoostMaxAttempts 3
 
 #define kBoostFadeOutSpeed 10
+#define kBoostingTime 5
 
 #define kPlectrumsPerBoostBtnPressed 5
-#define kBoostingTime 20
 
 const bool kPreloadField = true;
 
