@@ -98,9 +98,9 @@ bool GemField::init() {
 			{3,4,2,3,5,2,3,2},
 			{4,1,1,4,1,3,2,3},
 			{1,5,3,1,5,2,3,4},
-			{3,4,3,3,5,3,4,2},
+			{3,4,3,1,5,3,4,2},
 			{1,2,1,3,1,2,1,3},
-            {4,1,3,2,2,1,3,1},
+            {4,1,3,1,2,1,3,1},
             {4,2,3,1,2,3,3,2}
 		};
         
@@ -576,7 +576,23 @@ void GemField::swapGems(int fromX, int fromY, int toX, int toY) {
     bool skipMatchLookup = false;
     
     // check super swaps here
-    if(first->getType() == GT_NoteMaker || second->getType() == GT_NoteMaker) {
+    if(first->getType() == GT_NoteMaker && second->getType() == GT_NoteMaker) {
+        skipMatchLookup = true;
+
+        first->swapTo(toX, toY, false, GS_AboutToDestroyByNote);
+        second->swapTo(fromX, fromY, false, GS_AboutToDestroyByNote);
+        
+//        for(int i = 0; i < kFieldHeight; ++i) {
+//            for(int j = 0; j < kFieldWidth; ++j) {
+//                if(first != gems[i][j] && second != gems[i][j]) {
+//                    //gems[i][j]->prepareToBeDestroyedByNote();
+//                }
+//            }
+//        }
+        
+        state = FS_SwappingTwoNotes;
+        
+    } else if(first->getType() == GT_NoteMaker || second->getType() == GT_NoteMaker) {
         skipMatchLookup = true;
         
         Gem *noteMaker = nullptr;
@@ -985,6 +1001,38 @@ void GemField::update(float dt) {
             } break;
         case FS_DestroyingFourInRowIcons:
             if(!areGemsBeingMoved()) {                
+                state = FS_Destroying;
+            }
+            break;
+        case FS_SwappingTwoNotes:
+            if(!areGemsBeingMoved()) {
+                // turn into plectrums
+                for(int i = 0; i < kFieldHeight; ++i) {
+                    for(int j = 0; j < kFieldWidth; ++j) {
+                        if(gems[i][j]->getState() != GS_AboutToDestroyByNote) {
+                            gems[i][j]->transformIntoPlectrum();
+                        }
+                    }
+                }
+                
+                state = FS_TurningIntoPlectrums;
+            }
+            break;
+        case FS_TurningIntoPlectrums:
+            if(!areGemsBeingMoved()) {
+                // destroy everything here
+                for(int i = 0; i < kFieldHeight; ++i) {
+                    for(int j = 0; j < kFieldWidth; ++j) {
+                        //if(gems[i][j]->getState()) {
+                        this->destroyGem(j, i, i * 0.01 + j * 0.0);
+                        //}
+                    }
+                    
+                    for(FieldWatcherDelegatePool::iterator it = watchers.begin(); it != watchers.end(); it++) {
+                        (*it)->onPlectrumComboReady();
+                    }
+                }
+                
                 state = FS_Destroying;
             }
             break;

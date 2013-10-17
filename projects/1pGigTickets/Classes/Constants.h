@@ -115,6 +115,8 @@ enum FieldState {
     FS_SwappingNoteWithFourInRowIcon,
     FS_TurningGemsToFourInRowIcons,
     FS_DestroyingFourInRowIcons,
+    FS_SwappingTwoNotes,
+    FS_TurningIntoPlectrums,
 };
 
 #if(kSpawnBonuses == 1)

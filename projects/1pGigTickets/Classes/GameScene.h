@@ -44,6 +44,8 @@ public:
 	virtual void onGemsFinishedMoving();
 	virtual void onMoveMade(bool legal);
     
+    virtual void onPlectrumComboReady();
+    
     // quiz
     void showQuizUI();
     void onQuizUIPoppedOut();

@@ -22,6 +22,9 @@ public:
 	void match(MatchType matchType = MT_None);
 	void destroy(float delay = 0.0f);
     void transformIntoBonus(GemType type, float delay = 0.0f, GemState completionState = GS_Transformed);
+    
+    void transformIntoPlectrum(float delay = 0);
+    
 	void remove();
 
 	void reset(int x, int y, GemColour = GC_Random, GemType = GT_Colour);
@@ -48,7 +51,7 @@ private:
 	void moveTo(int x, int y, float time, bool goBack = false, int blocksToWait = 0, int rowsToWait = 0, GemState completionState = GS_Moved);
 	void onMovementEnd(Object *sender);
 	void onDestructionEnd(Object *sender);
-    void onTransformationEnd(Object *sender);
+    void onTransformationEnd();
 private:
 	GemState state;
 	GemColour colour;

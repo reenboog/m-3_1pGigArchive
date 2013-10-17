@@ -232,6 +232,10 @@ void GameScene::onMoveMade(bool legal) {
 	}
 }
 
+void GameScene::onPlectrumComboReady() {
+    ui->setPlectrums(GameConfig::sharedInstance()->currentPlectrums + 20);
+}
+
 void GameScene::onGemsStartedSwapping() {
 	canTouch = false;
 }

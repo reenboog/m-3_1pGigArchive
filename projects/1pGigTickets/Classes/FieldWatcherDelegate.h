@@ -15,7 +15,11 @@ public:
 	
     // player specific stuff
 	virtual void onMoveMade(bool legal) = 0;
+    
+    // game-specifi stuff
+    virtual void onPlectrumComboReady() = 0;
 };
+
 
 typedef std::list<FieldWatcherDelegate *> FieldWatcherDelegatePool;
 

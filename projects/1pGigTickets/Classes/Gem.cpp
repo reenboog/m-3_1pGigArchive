@@ -150,7 +150,6 @@ void Gem::transformIntoBonus(GemType type, float delay, GemState completionState
             runAction(RepeatForever::create(action));
         };
         
-        //Action *endTransformation = CallFuncN::create(CC_CALLBACK_1(Gem::onTransformationEnd, this));
         Action *endTransformation = nullptr;
         
         switch(completionState) {
@@ -159,7 +158,7 @@ void Gem::transformIntoBonus(GemType type, float delay, GemState completionState
                 break;
             case GS_Transformed:
             default:
-                endTransformation = CallFuncN::create(CC_CALLBACK_1(Gem::onTransformationEnd, this));
+                endTransformation = CallFunc::create(CC_CALLBACK_0(Gem::onTransformationEnd, this));
                 break;
         }
         
@@ -178,7 +177,23 @@ void Gem::transformIntoBonus(GemType type, float delay, GemState completionState
 	}
 }
 
-void Gem::onTransformationEnd(Object *sender) {
+void Gem::transformIntoPlectrum(float delay) {
+    this->state = GS_Transforming;
+    this->colour = GC_Plectrum;
+    
+    setDisplayFrame(SpriteFrameCache::getInstance()->getSpriteFrameByName("plectrum0.png"));
+    
+    this->runAction(Sequence::create(DelayTime::create(delay),
+                                     ScaleTo::create(kTransformationTime / 6.f, 1.1),
+                                     ScaleTo::create(kTransformationTime / 5.f, 0.9),
+                                     ScaleTo::create(kTransformationTime / 4.f, 1),
+                                     CallFunc::create([this]() {
+                                        this->onTransformationEnd();
+                                     }),
+                                     NULL));
+}
+
+void Gem::onTransformationEnd() {
 	state = GS_Transformed;    
 }
 
