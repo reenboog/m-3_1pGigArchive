@@ -826,7 +826,8 @@ void GemField::update(float dt) {
 				resetGemsState();
 				state = FS_Waiting;
 			} else {
-				shuffleField(true);
+				//shuffleField(true);
+                shuffleField(false);
 				for(FieldWatcherDelegatePool::iterator it = watchers.begin(); it != watchers.end(); it++) {
 					(*it)->onGemsToBeShuffled();
 				}

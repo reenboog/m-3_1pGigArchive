@@ -87,6 +87,8 @@ void QuizUI::popUp() {
 }
 
 void QuizUI::popOut() {
+    gameLayer->onCorrectQuizAnswer();
+    
     Menu *menu = (Menu*)back->getChildByTag(kTemporalQuitBtnTag);
     menu->setEnabled(false);
     

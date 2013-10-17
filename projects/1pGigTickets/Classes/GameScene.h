@@ -48,6 +48,8 @@ public:
     void showQuizUI();
     void onQuizUIPoppedOut();
     
+    void onCorrectQuizAnswer();
+    
     // update logic
     void update(float dt);
     void onGameOver();
@@ -62,6 +64,8 @@ public:
     
     void addBoost(float value);
     void addQuiz(float value);
+    
+    void addScore(int score);
     
     // reset
     void reset();

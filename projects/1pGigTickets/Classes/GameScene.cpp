@@ -146,10 +146,9 @@ void GameScene::reset() {
 #pragma mark - field watcher delegate
 
 void GameScene::onGemDestroyed(GemColour colour, int x, int y, int score) {
-    score *= scoreMultiplier;
+    score *= scoreMultiplier * clampf((quizValue + 1), 0, 6);
     
-    this->score += score;
-    ui->setscore(this->score);
+    this->addScore(score);
     
     Point worldPos = this->convertFieldCoordinatesToWorldLocation({x, y});
     this->popMatchScoresUpAtPoint(score, worldPos.x, worldPos.y);
@@ -162,11 +161,10 @@ void GameScene::onGemDestroyed(GemColour colour, int x, int y, int score) {
 }
 
 void GameScene::onGemsMatched(int length, GemColour colour, int startX, int startY, int endX, int endY, int score) {
-    score *= scoreMultiplier;
+    score *= scoreMultiplier * clampf((quizValue + 1), 0, 6);
     
-	this->score += score;
-    ui->setscore(this->score);
-    
+    this->addScore(score);
+
     float stepX = 1.0f;
     float stepY = -1.0f;
     
@@ -210,7 +208,7 @@ void GameScene::onGemsMatched(int length, GemColour colour, int startX, int star
     if(colour == GC_Plectrum) {
         GameConfig::sharedInstance()->currentPlectrums += 1;
         ui->setPlectrums(GameConfig::sharedInstance()->currentPlectrums);
-    } else if(colour == GC_Question) {
+    } else if(colour == GC_Question && quizValue < kQuizMaxValue) {
         this->showQuizUI();
     }
 }
@@ -270,6 +268,14 @@ void GameScene::showQuizUI() {
 void GameScene::onQuizUIPoppedOut() {
     this->onEnter();
     ui->onEnter();
+}
+
+void GameScene::onCorrectQuizAnswer() {
+    quizValue += 1;
+    
+    this->setQuiz(quizValue);
+    // add additional bonus score
+    this->addScore(100);
 }
 
 #pragma mark - ui
@@ -366,6 +372,12 @@ void GameScene::addBoost(float value) {
 void GameScene::addQuiz(float value) {
     quizValue += value;
     setQuiz(quizValue);
+}
+
+void GameScene::addScore(int score) {
+    this->score += score;
+    
+    ui->setscore(this->score);
 }
 
 #pragma mark - touches

@@ -657,6 +657,7 @@ void ScrollView::ccTouchMoved(Touch* touch, Event* event)
 
             newPoint     = this->convertTouchToNodeSpace((Touch*)_touches->objectAtIndex(0));
             moveDistance = newPoint - _touchPoint;
+            moveDistance = moveDistance * 0.5;
             
             float dis = 0.0f;
             if (_direction == Direction::VERTICAL)

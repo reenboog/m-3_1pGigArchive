@@ -11,9 +11,9 @@ USING_NS_CC;
 #define kGemTypeAmount 6
 
 #define kTileSize 80.0f
-#define kSwapTime 0.1f
-#define kFallTime 0.1f
-#define kDestructionTime 0.1f
+#define kSwapTime 0.13f
+#define kFallTime 0.13f
+#define kDestructionTime 0.11f
 
 #define kBonusChance 0.0f
 

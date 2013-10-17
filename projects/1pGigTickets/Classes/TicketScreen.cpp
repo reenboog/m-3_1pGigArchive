@@ -54,8 +54,8 @@ bool TicketScreen::init() {
     float listMenuDisp = 0.96;
     float plectrumsDisp = 0.953;
     
-    int tableHeight = 800;
-    int tableDisp = 40;
+    int tableHeight = 730;
+    int tableDisp = 100;
     
     float shareMenuDisp = 0.857;
     
@@ -64,8 +64,8 @@ bool TicketScreen::init() {
         plectrumsDisp = 0.957;
         shareMenuDisp = 0.869;
         
-        tableHeight = 935;
-        tableDisp = 30;
+        tableHeight = 865;
+        tableDisp = 100;
     }
 
     // list btn

@@ -10,7 +10,7 @@
 #include "Constants.h"
 #include "TicketScreen.h"
 
-#define kIndicatorStartAngle 55
+#define kIndicatorStartAngle 66
 
 GameUI::~GameUI() {
 }
@@ -110,7 +110,8 @@ bool GameUI::init() {
     boostArrow = Sprite::create("ui/indicatorArrow.png");
     boostArrow->setAnchorPoint({0.5, 0});
     boostArrow->setRotation(-kIndicatorStartAngle);
-    boostArrow->setPosition({boostBack->getContentSize().width * 0.5, boostBack->getContentSize().height * 0.0});
+    boostArrow->setPosition({boostBack->getContentSize().width * 0.5, boostBack->getContentSize().height * 0.15});
+    boostArrow->setScaleY(0.9);
     
     boostBack->addChild(boostArrow);
     
@@ -129,7 +130,8 @@ bool GameUI::init() {
     quizArrow = Sprite::create("ui/indicatorArrow.png");
     quizArrow->setAnchorPoint({0.5, 0});
     quizArrow->setRotation(-kIndicatorStartAngle);
-    quizArrow->setPosition({quizBack->getContentSize().width * 0.5, quizBack->getContentSize().height * 0.0});
+    quizArrow->setPosition({quizBack->getContentSize().width * 0.5, quizBack->getContentSize().height * 0.15});
+    quizArrow->setScaleY(0.9);
     
     quizBack->addChild(quizArrow);
     
@@ -218,6 +220,16 @@ void GameUI::setPlectrums(int value) {
     plectrumsStr.appendWithFormat("%i", value);
     
     plectrumsLabel->setString(plectrumsStr.getCString());
+
+    if(value > 999) {
+        plectrumsLabel->setScale(0.65);
+        plectrumsLabel->setString("999+");
+    } else if(value > 99) {
+        plectrumsLabel->setScale(0.85);
+    } else {
+        plectrumsLabel->setScale(1.0);
+    }
+    
 }
 
 #pragma mark - boost btn
