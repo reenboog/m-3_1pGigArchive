@@ -46,7 +46,7 @@ bool GameUI::init() {
     // pause
     Size visibleSize = Director::getInstance()->getVisibleSize();
     
-    float pauseMenuDisp = 0.968;
+    float pauseMenuDisp = 0.971;
     float timeMountDisp = 0.968;
     float scoreMountDisp = 0.968;
     float plectrumDisp = 0.95;
@@ -55,20 +55,20 @@ bool GameUI::init() {
     float quizBackDisp = 0.86;
     
     if(visibleSize.height == 1136) {
-        pauseMenuDisp = 0.95;
-        timeMountDisp = 0.95;
-        scoreMountDisp = 0.95;
-        plectrumDisp = 0.94;
-        boostMenuDisp = 0.84;
-        boostBackDisp = 0.85;
-        quizBackDisp = 0.85;
+        pauseMenuDisp = 0.97;
+        timeMountDisp = 0.972;
+        scoreMountDisp = 0.972;
+        plectrumDisp = 0.958;
+        boostMenuDisp = 0.858;
+        boostBackDisp = 0.868;
+        quizBackDisp = 0.868;
     }
     
     pauseBtn = MenuItemImage::create("ui/pauseBtn.png", "ui/pauseBtnOn.png", "ui/pauseBtnOn.png", CC_CALLBACK_1(GameUI::onPauseBtnPressed, this));
     pauseBtn->setPosition({0, 0});
     
     Menu *pauseMenu = Menu::create(pauseBtn, NULL);
-    pauseMenu->setPosition({visibleSize.width * 0.06, visibleSize.height * pauseMenuDisp});
+    pauseMenu->setPosition({visibleSize.width * 0.053, visibleSize.height * pauseMenuDisp});
     
     this->addChild(pauseMenu);
     
@@ -80,7 +80,7 @@ bool GameUI::init() {
     
     // score mount
     scoreMount = Sprite::create("ui/scoreMount.png");
-    scoreMount->setPosition({visibleSize.width * 0.78, visibleSize.height * scoreMountDisp});
+    scoreMount->setPosition({visibleSize.width * 0.79, visibleSize.height * scoreMountDisp});
     
     this->addChild(scoreMount);
     
@@ -150,7 +150,7 @@ bool GameUI::init() {
     scoreMount->addChild(scoreLabel);
     
     plectrumsLabel = LabelBMFont::create("0", "allerWhiteScores.fnt");
-    plectrumsLabel->setPosition({plectrumsMount->getContentSize().width * 0.5, plectrumsMount->getContentSize().height * 0.5});
+    plectrumsLabel->setPosition({plectrumsMount->getContentSize().width * 0.5, plectrumsMount->getContentSize().height * 0.6});
     plectrumsMount->addChild(plectrumsLabel);
     
     return true;

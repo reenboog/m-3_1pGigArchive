@@ -30,10 +30,10 @@ bool AppDelegate::applicationDidFinishLaunching() {
     Size visibleSize = Director::getInstance()->getVisibleSize();
     // I'm really sorry for doing this(
     if(visibleSize.height == 1136) {
-        GameConfig::sharedInstance()->iOSFieldDisplacement = Point(0, 31);
+        GameConfig::sharedInstance()->iOSFieldDisplacement = Point(10, 33);
         FileUtils::getInstance()->addSearchPath("Res/iphone5");
     } else {
-        GameConfig::sharedInstance()->iOSFieldDisplacement = Point(14, 48);
+        GameConfig::sharedInstance()->iOSFieldDisplacement = Point(58, 56);
         FileUtils::getInstance()->addSearchPath("Res/iphone");
     }
     
