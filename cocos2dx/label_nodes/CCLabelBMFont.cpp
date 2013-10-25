@@ -773,6 +773,17 @@ void LabelBMFont::setString(unsigned short *newString, bool needUpdateLabel)
     if (needUpdateLabel) {
         updateLabel();
     }
+    
+    Size size = this->getContentSize();
+    if(int(size.width) % 2 != 0) {
+        size.width += 1;
+    }
+    
+    if(int(size.height) % 2 != 0) {
+        size.height += 1;
+    }
+    
+    this->setContentSize(size);
 }
 
 const char* LabelBMFont::getString(void) const
