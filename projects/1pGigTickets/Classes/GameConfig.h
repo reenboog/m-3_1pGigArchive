@@ -15,7 +15,7 @@ USING_NS_CC;
 
 #define kAppVersion         1
 #define kGameTimer          180
-#define kQuizTimer          5
+#define kQuizTimer          20
 #define kQMultiplier        5
 #define kBoostMultiplier    2
 

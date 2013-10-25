@@ -58,10 +58,10 @@ bool GameUI::init() {
     float quizBackDisp = 0.86;
     
     if(visibleSize.height == 1136) {
-        pauseMenuDisp = 0.97;
+        pauseMenuDisp = 0.967;
         timeMountDisp = 0.972;
         scoreMountDisp = 0.972;
-        plectrumDisp = 0.958;
+        plectrumDisp = 0.956;
         boostMenuDisp = 0.858;
         boostBackDisp = 0.868;
         quizBackDisp = 0.868;
@@ -71,25 +71,25 @@ bool GameUI::init() {
     pauseBtn->setPosition({0, 0});
     
     Menu *pauseMenu = Menu::create(pauseBtn, NULL);
-    pauseMenu->setPosition({visibleSize.width * 0.053, visibleSize.height * pauseMenuDisp});
+    pauseMenu->setPosition({int(visibleSize.width * 0.052), int(visibleSize.height * pauseMenuDisp)});
     
     this->addChild(pauseMenu);
     
     // time mount
     timeMount = Sprite::create("ui/timeMount.png");
-    timeMount->setPosition({visibleSize.width * 0.23, visibleSize.height * timeMountDisp});
+    timeMount->setPosition({int(visibleSize.width * 0.225), int(visibleSize.height * timeMountDisp)});
     
     this->addChild(timeMount);
     
     // score mount
     scoreMount = Sprite::create("ui/scoreMount.png");
-    scoreMount->setPosition({visibleSize.width * 0.79, visibleSize.height * scoreMountDisp});
+    scoreMount->setPosition({int(visibleSize.width * 0.786), int(visibleSize.height * scoreMountDisp)});
     
     this->addChild(scoreMount);
     
     // plectrums mount
     plectrumsMount = Sprite::create("ui/plectrumsMount.png");
-    plectrumsMount->setPosition({visibleSize.width * 0.5, visibleSize.height * plectrumDisp});
+    plectrumsMount->setPosition({int(visibleSize.width * 0.5), int(visibleSize.height * plectrumDisp)});
     
     this->addChild(plectrumsMount);
 
@@ -99,63 +99,63 @@ bool GameUI::init() {
     boostBtn->setPosition({0, 0});
     
     Menu *boostMenu = Menu::create(boostBtn, NULL);
-    boostMenu->setPosition({visibleSize.width * 0.5, visibleSize.height * boostMenuDisp});
+    boostMenu->setPosition({int(visibleSize.width * 0.5), int(visibleSize.height * boostMenuDisp)});
     
     this->addChild(boostMenu);
     
     // boost mount
     
     boostBack = Sprite::create("ui/indicatorBoost.png");
-    boostBack->setPosition({visibleSize.width * 0.21, visibleSize.height * boostBackDisp});
+    boostBack->setPosition({int(visibleSize.width * 0.22), int(visibleSize.height * boostBackDisp)});
     
     this->addChild(boostBack);
     
     boostArrow = Sprite::create("ui/indicatorArrow.png");
     boostArrow->setAnchorPoint({0.5, 0});
     boostArrow->setRotation(-kIndicatorStartAngle);
-    boostArrow->setPosition({boostBack->getContentSize().width * 0.5, boostBack->getContentSize().height * 0.15});
+    boostArrow->setPosition({int(boostBack->getContentSize().width * 0.5), int(boostBack->getContentSize().height * 0.15)});
     boostArrow->setScaleY(0.9);
     
     boostBack->addChild(boostArrow);
     
     boostTop = Sprite::create("ui/indicatorTop.png");
-    boostTop->setPosition({boostBack->getContentSize().width * 0.5, boostBack->getContentSize().height * 0.5});
+    boostTop->setPosition({int(boostBack->getContentSize().width * 0.5), int(boostBack->getContentSize().height * 0.5)});
     
     boostBack->addChild(boostTop);
     
     // quiz mount
     
     quizBack = Sprite::create("ui/indicatorQuiz.png");
-    quizBack->setPosition({visibleSize.width * 0.79, visibleSize.height * quizBackDisp});
+    quizBack->setPosition({int(visibleSize.width * 0.78), int(visibleSize.height * quizBackDisp)});
     
     this->addChild(quizBack);
     
     quizArrow = Sprite::create("ui/indicatorArrow.png");
     quizArrow->setAnchorPoint({0.5, 0});
     quizArrow->setRotation(-kIndicatorStartAngle);
-    quizArrow->setPosition({quizBack->getContentSize().width * 0.5, quizBack->getContentSize().height * 0.15});
+    quizArrow->setPosition({int(quizBack->getContentSize().width * 0.5), int(quizBack->getContentSize().height * 0.15)});
     quizArrow->setScaleY(0.9);
     
     quizBack->addChild(quizArrow);
     
     quizTop = Sprite::create("ui/indicatorTop.png");
-    quizTop->setPosition({quizBack->getContentSize().width * 0.5, quizBack->getContentSize().height * 0.5});
+    quizTop->setPosition({int(quizBack->getContentSize().width * 0.5), int(quizBack->getContentSize().height * 0.5)});
     
     quizBack->addChild(quizTop);
 
     // labels
     
     timeLabel = LabelBMFont::create("00:00", "allerYellowTime.fnt");
-    timeLabel->setPosition({timeMount->getContentSize().width * 0.5, timeMount->getContentSize().height * 0.5});
+    timeLabel->setPosition({int(timeMount->getContentSize().width * 0.5), int(timeMount->getContentSize().height * 0.5)});
     timeMount->addChild(timeLabel);
     
     scoreLabel = LabelBMFont::create("0", "allerWhiteScores.fnt");
     scoreLabel->setAnchorPoint({1, 0.5});
-    scoreLabel->setPosition({scoreMount->getContentSize().width * 0.9, scoreMount->getContentSize().height * 0.5});
+    scoreLabel->setPosition({int(scoreMount->getContentSize().width * 0.9), int(scoreMount->getContentSize().height * 0.5)});
     scoreMount->addChild(scoreLabel);
     
     plectrumsLabel = LabelBMFont::create("0", "allerWhiteScores.fnt");
-    plectrumsLabel->setPosition({plectrumsMount->getContentSize().width * 0.5, plectrumsMount->getContentSize().height * 0.6});
+    plectrumsLabel->setPosition({int(plectrumsMount->getContentSize().width * 0.5), int(plectrumsMount->getContentSize().height * 0.6)});
     plectrumsMount->addChild(plectrumsLabel);
     
     return true;

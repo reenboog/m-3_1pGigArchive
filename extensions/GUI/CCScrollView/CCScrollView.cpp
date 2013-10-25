@@ -29,8 +29,8 @@ NS_CC_EXT_BEGIN
 
 #define SCROLL_DEACCEL_RATE  0.95f
 #define SCROLL_DEACCEL_DIST  1.0f
-#define BOUNCE_DURATION      0.15f
-#define INSET_RATIO          0.2f
+#define BOUNCE_DURATION      0.35f
+#define INSET_RATIO          0.22f
 #define MOVE_INCH            7.0f/160.0f
 
 static float convertDistanceFromPointToInch(float pointDis)
@@ -217,7 +217,8 @@ void ScrollView::setContentOffsetInDuration(Point offset, float dt)
 {
     FiniteTimeAction *scroll, *expire;
     
-    scroll = MoveTo::create(dt, offset);
+    //scroll = EaseSineOut::create(EaseSineOut::create(MoveTo::create(dt * 1.3, offset)));
+    scroll = EaseElasticOut::create(MoveTo::create(dt * 2.7, offset), 6);
     expire = CallFuncN::create(CC_CALLBACK_1(ScrollView::stoppedAnimatedScroll,this));
     _container->runAction(Sequence::create(scroll, expire, NULL));
     this->schedule(schedule_selector(ScrollView::performedAnimatedScroll));
@@ -657,7 +658,7 @@ void ScrollView::ccTouchMoved(Touch* touch, Event* event)
 
             newPoint     = this->convertTouchToNodeSpace((Touch*)_touches->objectAtIndex(0));
             moveDistance = newPoint - _touchPoint;
-            moveDistance = moveDistance * 0.5;
+            moveDistance = moveDistance * 0.6;
             
             float dis = 0.0f;
             if (_direction == Direction::VERTICAL)

@@ -25,11 +25,18 @@ public:
     
     // callbacks
     
+    void onTimeOut();
+    void update(float dt);
+    
     void popUp();
     void popOut();
 private:
     LayerColor *shadowLayer;
     Sprite *back;
+    Sprite *timeProgressMount;
+    ProgressTimer *timeProgress;
+    
+    float currentTime;
 public:
     GameScene *gameLayer;
 };

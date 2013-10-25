@@ -20,6 +20,9 @@ bool AppDelegate::applicationDidFinishLaunching() {
     EGLView * eglView = EGLView::getInstance();
 
     director->setOpenGLView(eglView);
+    
+    Texture2D::setDefaultAlphaPixelFormat(Texture2D::PixelFormat::RGBA8888);
+    Director::getInstance()->setProjection(Director::Projection::_2D);
 	
     // turn on display FPS
     director->setDisplayStats(false);

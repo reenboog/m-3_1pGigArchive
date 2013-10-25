@@ -41,6 +41,7 @@
 		B8CE578217E35A6900BBBDAE /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B8CE577B17E35A6900BBBDAE /* Default-568h@2x.png */; };
 		B8CE578317E35A6900BBBDAE /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = B8CE577C17E35A6900BBBDAE /* Default.png */; };
 		B8CE578417E35A6900BBBDAE /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B8CE577D17E35A6900BBBDAE /* Default@2x.png */; };
+		B8E6380D181847AB00DC9E1B /* Icon-120.png in Resources */ = {isa = PBXBuildFile; fileRef = B8E6380C181847AB00DC9E1B /* Icon-120.png */; };
 		B8F426A8180D9D1700AF20A7 /* TicketScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8F426A6180D9D1700AF20A7 /* TicketScreen.cpp */; };
 		B8F426B7180E4E0000AF20A7 /* ScoreUI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8F426B5180E4E0000AF20A7 /* ScoreUI.cpp */; };
 		B8F426BA180E644300AF20A7 /* AdScreen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B8F426B8180E643E00AF20A7 /* AdScreen.cpp */; };
@@ -233,6 +234,7 @@
 		B8CE577B17E35A6900BBBDAE /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = SOURCE_ROOT; };
 		B8CE577C17E35A6900BBBDAE /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = SOURCE_ROOT; };
 		B8CE577D17E35A6900BBBDAE /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = SOURCE_ROOT; };
+		B8E6380C181847AB00DC9E1B /* Icon-120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-120.png"; sourceTree = SOURCE_ROOT; };
 		B8F426A6180D9D1700AF20A7 /* TicketScreen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TicketScreen.cpp; path = ../Classes/TicketScreen.cpp; sourceTree = "<group>"; };
 		B8F426A7180D9D1700AF20A7 /* TicketScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TicketScreen.h; path = ../Classes/TicketScreen.h; sourceTree = "<group>"; };
 		B8F426B5180E4E0000AF20A7 /* ScoreUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ScoreUI.cpp; path = ../Classes/ScoreUI.cpp; sourceTree = "<group>"; };
@@ -367,6 +369,7 @@
 		78C7DDAA14EBA5050085D0C2 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B8E6380C181847AB00DC9E1B /* Icon-120.png */,
 				B8697B5E17E5D6880090EA88 /* Icon-114.png */,
 				B8697B5F17E5D6880090EA88 /* Icon-144.png */,
 				B8CE577B17E35A6900BBBDAE /* Default-568h@2x.png */,
@@ -609,6 +612,7 @@
 				B8697B5617E5D6790090EA88 /* Icon-57.png in Resources */,
 				B8697B5717E5D6790090EA88 /* Icon-57@2x.png in Resources */,
 				B8697B5817E5D6790090EA88 /* Icon-60.png in Resources */,
+				B8E6380D181847AB00DC9E1B /* Icon-120.png in Resources */,
 				B8697B5917E5D6790090EA88 /* Icon-60@2x.png in Resources */,
 				B8697B5A17E5D6790090EA88 /* Icon-72.png in Resources */,
 				B8697B5B17E5D6790090EA88 /* Icon-72@2x.png in Resources */,
@@ -710,7 +714,7 @@
 					"\"$(SRCROOT)/../../../cocos2dx/platform/ios/Simulation\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../../cocos2dx/platform/third_party/ios/libraries\"",
 					"\"$(SRCROOT)/../../../external/libwebsockets/ios/lib\"",
@@ -721,7 +725,7 @@
 				PROVISIONING_PROFILE = "9BE35596-0786-48DB-85B4-7BAB011FF328";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9BE35596-0786-48DB-85B4-7BAB011FF328";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALID_ARCHS = "armv6 armv7 i386";
 			};
@@ -733,7 +737,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CODE_SIGN_IDENTITY = "iPhone Developer: Alex Gievsky (66WDEA5Q7M)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -761,7 +765,7 @@
 					"\"$(SRCROOT)/../../../cocos2dx/platform/ios/Simulation\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../../cocos2dx/platform/third_party/ios/libraries\"",
 					"\"$(SRCROOT)/../../../external/libwebsockets/ios/lib\"",
@@ -771,7 +775,7 @@
 				PROVISIONING_PROFILE = "9BE35596-0786-48DB-85B4-7BAB011FF328";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -785,6 +789,7 @@
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv6 armv7 i386";
@@ -825,7 +830,7 @@
 					"\"$(SRCROOT)/../../../cocos2dx/platform/ios/Simulation\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				LIBRARY_SEARCH_PATHS = (
 					"\"$(SRCROOT)/../../../cocos2dx/platform/third_party/ios/libraries\"",
 					"\"$(SRCROOT)/../../../external/libwebsockets/ios/lib\"",
@@ -835,7 +840,7 @@
 				PROVISIONING_PROFILE = "D786E91A-679D-4B1D-85BF-0B12BEFF4828";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D786E91A-679D-4B1D-85BF-0B12BEFF4828";
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				USER_HEADER_SEARCH_PATHS = "";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -849,6 +854,7 @@
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv6 armv7 i386";
 			};
@@ -862,6 +868,7 @@
 				GCC_VERSION = "";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALID_ARCHS = "armv6 armv7 i386";

@@ -54,7 +54,7 @@ bool TicketScreen::init() {
     float listMenuDisp = 0.96;
     float plectrumsDisp = 0.953;
     
-    int tableHeight = 730;
+    int tableHeight = 700;
     int tableDisp = 100;
     
     float shareMenuDisp = 0.857;
@@ -105,6 +105,7 @@ bool TicketScreen::init() {
 	tableView->setDirection(ScrollView::Direction::VERTICAL);
 	tableView->setPosition(Point((visibleSize.width - itemWidth) / 2.0, tableDisp));
 	tableView->setDelegate(this);
+    tableView->setBounceable(true);
 	tableView->setVerticalFillOrder(TableView::VerticalFillOrder::TOP_DOWN);
 
 	this->addChild(tableView);

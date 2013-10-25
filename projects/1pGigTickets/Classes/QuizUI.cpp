@@ -17,6 +17,9 @@ QuizUI::QuizUI() {
 //    missOutItem = nullptr;
 //    topScoreSprite = nullptr;
 //    scoreLabel = nullptr;
+    timeProgressMount = nullptr;
+    timeProgress = nullptr;
+    currentTime = 0;
 }
 
 QuizUI::~QuizUI() {
@@ -65,6 +68,20 @@ bool QuizUI::init() {
     back->addChild(menu);
     menu->setEnabled(false);
     
+    timeProgressMount = Sprite::create("quiz/quizProgressMount.png");
+    timeProgressMount->setPosition({back->getContentSize().width / 2 + 1, back->getContentSize().height * 0.72});
+    
+    timeProgress = ProgressTimer::create(Sprite::create("quiz/quizProgress.png"));
+    timeProgress->setPosition({timeProgressMount->getContentSize().width / 2.0, timeProgressMount->getContentSize().height / 2.0});
+    timeProgress->setType(ProgressTimer::Type::BAR);
+    timeProgress->setBarChangeRate({1, 0});
+    timeProgress->setMidpoint({0, 0});
+    timeProgress->setPercentage(0);
+    
+    timeProgressMount->addChild(timeProgress);
+    
+    back->addChild(timeProgressMount);
+    
     this->setPosition(-visibleSize.width, 0);
     
     return true;
@@ -73,20 +90,34 @@ bool QuizUI::init() {
 #pragma mark - popup-out
 
 void QuizUI::popUp() {
+    Menu *menu = (Menu*)back->getChildByTag(kTemporalQuitBtnTag);
+    
+    if(menu->isEnabled()) {
+        return;
+    }
+    
+    menu->setEnabled(true);
+    
     this->setPosition({0, 0});
     
     shadowLayer->runAction(FadeTo::create(0.2, 140)); // 220
     
-    Menu *menu = (Menu*)back->getChildByTag(kTemporalQuitBtnTag);
-    menu->setEnabled(true);
     
     back->setScale(0);
     back->runAction(Sequence::create(DelayTime::create(0.15),
                                      EaseElasticOut::create(ScaleTo::create(0.5, 1.0f)),
                                      NULL));
+ 
+    currentTime = kQuizTime;
+    
+    timeProgress->setPercentage(0);
+    
+    this->scheduleUpdate();
 }
 
 void QuizUI::popOut() {
+    this->unscheduleUpdate();
+    
     gameLayer->onCorrectQuizAnswer();
     
     Menu *menu = (Menu*)back->getChildByTag(kTemporalQuitBtnTag);
@@ -103,4 +134,20 @@ void QuizUI::popOut() {
                                         gameLayer->onQuizUIPoppedOut();
                                      }),
                                      NULL));
+}
+
+void QuizUI::onTimeOut() {
+    this->popOut();
+}
+
+void QuizUI::update(float dt) {
+    currentTime -= dt;
+    
+    if(currentTime <= 0) {
+        currentTime = 0;
+        
+        this->onTimeOut();
+    }
+    
+    timeProgress->setPercentage(currentTime / kQuizTime * 100);
 }

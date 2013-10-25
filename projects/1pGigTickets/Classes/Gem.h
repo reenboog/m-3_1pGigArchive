@@ -48,7 +48,7 @@ public:
 	static Point convertCoordinatesToPixels(int x, int y);
 private:
     void applyBonusStyling();
-	void moveTo(int x, int y, float time, bool goBack = false, int blocksToWait = 0, int rowsToWait = 0, GemState completionState = GS_Moved);
+	void moveTo(int x, int y, float time, bool goBack = false, int blocksToWait = 0, int rowsToWait = 0, GemState completionState = GS_Moved, bool swapping = false);
 	void onMovementEnd(Object *sender);
 	void onDestructionEnd(Object *sender);
     void onTransformationEnd();

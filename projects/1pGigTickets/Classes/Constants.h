@@ -25,7 +25,7 @@ USING_NS_CC;
 
 #define kTransformationTime 0.3f
 
-#define kColumnsFallDelay 0
+#define kColumnsFallDelay 0.
 #define kRowsFallDelay 0
 
 #define kSpawnBonuses 1
@@ -46,6 +46,7 @@ USING_NS_CC;
 #define kBoostingTime 5
 
 #define kPlectrumsPerBoostBtnPressed 5
+#define kQuizTime 5
 
 const bool kPreloadField = true;
 
