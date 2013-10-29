@@ -15,6 +15,13 @@ USING_NS_CC;
 #define kFallTime 0.13f
 #define kDestructionTime 0.11f
 
+// gem movement constants
+#define k1Delay  0.7f;  //Response delay constant
+#define k2Delta  0.2f;  //Bounce overlap
+#define k3Delay  0.15f; //what is this??
+
+//
+
 #define kBonusChance 0.0f
 
 #define zGem 2
@@ -25,7 +32,7 @@ USING_NS_CC;
 
 #define kTransformationTime 0.3f
 
-#define kColumnsFallDelay 0.
+#define kColumnsFallDelay 0
 #define kRowsFallDelay 0
 
 #define kSpawnBonuses 1

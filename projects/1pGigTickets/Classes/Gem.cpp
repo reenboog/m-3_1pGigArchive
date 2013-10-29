@@ -258,16 +258,30 @@ void Gem::moveTo(int x, int y, float time, bool goBack, int blocksToWait, int ro
     
     float moveDownDelay = 0;
     
+    float _1Delay = k1Delay;
+    float _2Delta = k2Delta;
+    float _3Delay = k3Delay;
+    
+    if(swapping) {
+        _1Delay = 0.7f;
+        _2Delta = 0.0f;
+        _3Delay = 0;
+    }
+    
     if(swapping && !goBack) {
         moveDownDelay = 0.1;
     }
     
 	Action *move = nullptr;
 
-    Action *moveDown = MoveTo::create(((this->getPosition().getDistance(newLocation) / kTileSize) * time) * 0.7f,
-                                      newLocation + Point(delta.x * kTileSize * 0.2f, delta.y * kTileSize * 0.2f));
+//    Action *moveDown = MoveTo::create(((this->getPosition().getDistance(newLocation) / kTileSize) * time) * 0.7f,
+//                                      newLocation + Point(delta.x * kTileSize * 0.2f, delta.y * kTileSize * 0.2f));
+    
+    Action *moveDown = MoveTo::create(((this->getPosition().getDistance(newLocation) / kTileSize) * time) * _1Delay,
+                                      newLocation + Point(delta.x * kTileSize * _2Delta, delta.y * kTileSize * _2Delta));
 
-    Action *moveUp = MoveBy::create(0.15, -Point(delta.x * kTileSize * 0.2, delta.y * kTileSize * 0.2f));
+    //Action *moveUp = MoveBy::create(0.15, -Point(delta.x * kTileSize * 0.2, delta.y * kTileSize * 0.2f));
+    Action *moveUp = MoveBy::create(_3Delay, -Point(delta.x * kTileSize * _2Delta, delta.y * kTileSize * _2Delta));
 
     move = Sequence::create((FiniteTimeAction*) moveDown, DelayTime::create(moveDownDelay), (FiniteTimeAction*) moveUp, NULL);
 
