@@ -94,14 +94,14 @@ bool GemField::init() {
     state = FS_Ready;
    	if(kPreloadField) {
 		const int customField[kFieldHeight][kFieldWidth] = {
-			{2,3,1,2,1,4,2,3},
-			{3,4,2,3,5,2,3,2},
-			{4,1,1,4,1,3,2,3},
-			{1,5,3,1,5,2,3,4},
-			{3,4,3,1,5,3,4,2},
-			{1,2,1,3,1,2,1,3},
-            {4,1,3,1,2,1,3,1},
-            {4,2,3,1,2,3,3,2}
+			{GC_Saxophone,GC_Plectrum,GC_Microphone,GC_Microphone,GC_Plectrum,GC_Guitar,GC_Microphone,GC_Keyboard},
+			{GC_Question,GC_Plectrum,GC_Question,GC_Plectrum,GC_Saxophone,GC_Keyboard,GC_Question,GC_Saxophone},
+			{GC_Microphone,GC_Microphone,GC_Guitar,GC_Keyboard,GC_Microphone,GC_Saxophone,GC_Keyboard,GC_Question},
+			{GC_Plectrum,GC_Saxophone,GC_Question,GC_Guitar,GC_Question,GC_Guitar,GC_Plectrum,GC_Plectrum},
+			{GC_Microphone,GC_Keyboard,GC_Plectrum, GC_Plectrum,GC_Saxophone,GC_Keyboard,GC_Microphone,GC_Guitar},
+			{GC_Question,GC_Question,GC_Plectrum,GC_Guitar,GC_Question,GC_Microphone,GC_Plectrum,GC_Keyboard},
+            {GC_Plectrum,GC_Keyboard, GC_Keyboard,GC_Saxophone,GC_Microphone,GC_Saxophone,GC_Keyboard,GC_Saxophone},
+            {GC_Plectrum,GC_Plectrum,GC_Guitar,GC_Microphone,GC_Plectrum,GC_Plectrum,GC_Guitar,GC_Guitar}
 		};
         
 		const int customFieldType[kFieldHeight][kFieldWidth] = {
@@ -124,6 +124,20 @@ bool GemField::init() {
 		}
 	}
 	shuffleField(false);
+    
+//    state = FS_Shuffling;
+//    
+//    for(int x = 0; x < kFieldWidth; x++) {
+//        for(int y = kFieldHeight - 1; y >= 0; y--) {
+//            if(fieldMask[y][x] == 1) {
+//                gems[y][x]->reset(x, y, gems[y][x]->getGemColour(), gems[y][x]->getType());
+//                
+//                removeGem(x, y);
+//            }
+//        }
+//    }
+//    
+//    refillField(false);
     
     scheduleUpdate();
     
@@ -1049,15 +1063,33 @@ void GemField::shuffleField(bool reset) {
 	if(reset) {
 		resetField();
 	} else {
-		for(int x = 0; x < kFieldWidth; x++) {
+        
+        std::vector<Gem *> unusedGems;
+        
+        for(int x = 0; x < kFieldWidth; x++) {
 			for(int y = kFieldHeight - 1; y >= 0; y--) {
 				if(fieldMask[y][x] == 1) {
-					gems[y][x]->reset(x, y, gems[y][x]->getGemColour(), gems[y][x]->getType());
-					removeGem(x, y);
+					unusedGems.push_back(gems[y][x]);
+				}
+			}
+		}
+
+        for(int x = 0; x < kFieldWidth; x++) {
+			for(int y = kFieldHeight - 1; y >= 0; y--) {
+				if(fieldMask[y][x] == 1) {
+                    
+                    int unusedGemIndex = rand() % unusedGems.size();
+					gems[y][x] = unusedGems[unusedGemIndex];
+                    gems[y][x]->reset(x, y, gems[y][x]->getGemColour(), gems[y][x]->getType());
+                    
+                    removeGem(x, y);
+
+                    unusedGems.erase(unusedGems.begin() + unusedGemIndex);
 				}
 			}
 		}
 	}
+    
 	refillField(false);
 }
 
